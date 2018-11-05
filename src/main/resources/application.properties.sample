@@ -1,0 +1,21 @@
+## Server
+server.port=
+
+## Datasource
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
+
+## Hibernate
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+spring.jpa.hibernate.ddl-auto=update
+logging.level.org.hibernate.SQL=DEBUG
+# logging.level.org.hibernate.type=trace
+
+## Jackson
+spring.jackson.serialization.WRITE_DATES_AS_TIMESTAMPS=false
+spring.jackson.time-zone=UTC
+
+## JWT
+app.jwtSecret=
+app.jwtExpirationInMs=
