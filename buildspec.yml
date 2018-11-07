@@ -1,0 +1,58 @@
+version: 0.2
+
+# === parameter store ===
+# SERVER_REPOSITORY_URI
+# DATASOURCE_URL
+# DATASOURCE_USERNAME
+# DATASOURCE_PASSWORD
+# JWT_SECRET
+
+phases:
+  install:
+    commands:
+    - echo Logging in to Amazon ECR...
+    - aws --version
+    - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+    - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+    - echo Writing application-dev.properties...
+    - echo '
+      spring.datasource.url='$DATASOURCE_URL'\n
+      spring.datasource.username='$DATASOURCE_USERNAME'\n
+      spring.datasource.password='$DATASOURCE_PASSWORD'\n
+      spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect\n
+      spring.jpa.hibernate.ddl-auto=update\n
+      logging.level.org.hibernate.SQL=DEBUG\n
+      app.jwtSecret='$JWT_SECRET > ./src/main/resources/application-dev.properties
+    - cat ./src/main/resources/application-dev.properties
+  pre_build:
+    commands:
+    - echo Maven Build started on `date`
+    - echo Building the Jar file...
+    - mvn clean package -DskipTests
+  build:
+    commands:
+    - echo Docker Build started on `date`
+    - echo Building the Docker image...
+    - docker version
+    - docker build -t $SERVER_REPOSITORY_URI:latest .
+    - docker tag $SERVER_REPOSITORY_URI:latest $SERVER_REPOSITORY_URI:$IMAGE_TAG
+  post_build:
+    commands:
+    - echo Build completed on `date`
+    - echo Pushing the Docker images...
+    - docker push $SERVER_REPOSITORY_URI:latest
+    - docker push $SERVER_REPOSITORY_URI:$IMAGE_TAG
+    - echo Writing image definitions file...
+    - printf '[{"name":"noisepipe-server","imageUri":"%s"}]' $SERVER_REPOSITORY_URI:$IMAGE_TAG > MyFilename.json
+
+artifacts:
+  type: zip
+  files:
+  - target/noisepipe-server.jar
+  - Dockerfile
+  - MyFilename.json
+  discard-paths: yes
+
+cache:
+  paths:
+  - '/root/.m2/**/*'
