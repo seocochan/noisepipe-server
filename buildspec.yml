@@ -46,10 +46,7 @@ phases:
     - printf '[{"name":"noisepipe-server","imageUri":"%s"}]' $SERVER_REPOSITORY_URI:$IMAGE_TAG > MyFilename.json
 
 artifacts:
-  type: zip
   files:
-  - target/noisepipe-server.jar
-  - Dockerfile
   - MyFilename.json
   discard-paths: yes
 
