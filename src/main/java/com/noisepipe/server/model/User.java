@@ -10,7 +10,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -55,10 +57,36 @@ public class User extends DateAudit {
           inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
+  @OneToMany(
+          mappedBy = "user",
+          cascade = CascadeType.ALL,
+          orphanRemoval = true
+  )
+  private List<Collection> collections = new ArrayList<>();
+
+  @OneToMany(
+          mappedBy = "user",
+          cascade = CascadeType.ALL,
+          orphanRemoval = true
+  )
+  private List<Comment> comments = new ArrayList<>();
+
+  @OneToMany(
+          mappedBy = "user",
+          cascade = CascadeType.ALL,
+          orphanRemoval = true
+  )
+  private List<Bookmark> bookmarks = new ArrayList<>();
+
   public User(String name, String username, String email, String password) {
     this.name = name;
     this.username = username;
     this.email = email;
     this.password = password;
+  }
+
+  public void addCollection(Collection collection) {
+    collections.add(collection);
+    collection.setUser(this);
   }
 }
