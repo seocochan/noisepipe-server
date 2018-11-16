@@ -61,6 +61,13 @@ public class Collection extends DateAudit {
   )
   private List<Tag> tags = new ArrayList<>();
 
+  public Collection(String title, String description, User user, List<Tag> tags) {
+    this.title = title;
+    this.description = description;
+    this.user = user;
+    this.tags = tags;
+  }
+
   public void addItem(Item item) {
     items.add(item);
     item.setCollection(this);

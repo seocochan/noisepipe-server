@@ -45,4 +45,8 @@ public class Tag extends DateAudit {
           uniqueConstraints = {@UniqueConstraint(columnNames = {"tag_id", "item_id"})}
   )
   private List<Item> items = new ArrayList<>();
+
+  public Tag(String name) {
+    this.name = name;
+  }
 }
