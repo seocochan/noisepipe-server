@@ -46,6 +46,15 @@ public class UserPrincipal implements UserDetails {
     );
   }
 
+  public User toUser() {
+    User user = new User();
+    user.setId(this.id);
+    user.setName(this.name);
+    user.setUsername(this.username);
+    user.setEmail(this.email);
+    return user;
+  }
+
   public Long getId() {
     return id;
   }

@@ -4,6 +4,7 @@ import com.noisepipe.server.model.audit.DateAudit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -27,6 +28,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class User extends DateAudit {
 
   @Id
