@@ -8,6 +8,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "items") // FIXME: unique(collection_id & position)
@@ -41,4 +43,17 @@ public class Item extends DateAudit {
   @ManyToOne(optional = false)
   @JoinColumn(name = "collection_id", nullable = false)
   private Collection collection;
+
+  @ManyToMany(
+          mappedBy = "items",
+          fetch = FetchType.LAZY
+  )
+  private List<Tag> tags = new ArrayList<>();
+
+  public void addTag(Tag tag) {
+    if (tags == null) {
+      tags = new ArrayList<>();
+    }
+    tags.add(tag);
+  }
 }

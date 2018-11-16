@@ -55,8 +55,21 @@ public class Collection extends DateAudit {
   )
   private List<Bookmark> bookmarks = new ArrayList<>();
 
+  @ManyToMany(
+          mappedBy = "collections",
+          fetch = FetchType.LAZY
+  )
+  private List<Tag> tags = new ArrayList<>();
+
   public void addItem(Item item) {
     items.add(item);
     item.setCollection(this);
+  }
+
+  public void addTag(Tag tag) {
+    if (tags == null) {
+      tags = new ArrayList<>();
+    }
+    tags.add(tag);
   }
 }
