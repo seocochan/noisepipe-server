@@ -50,19 +50,21 @@ public class UserService {
   }
 
   public User registerUser(SignUpRequest signUpRequest) {
-    User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
-            signUpRequest.getEmail(), signUpRequest.getPassword());
-    user.setPassword(passwordEncoder.encode(user.getPassword()));
     Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
             .orElseThrow(() -> new AppException("User Role not set."));
-    user.setRoles(Collections.singleton(userRole));
-    User result = userRepository.save(user);
+    User user = User.builder()
+            .name(signUpRequest.getName())
+            .username(signUpRequest.getUsername())
+            .email(signUpRequest.getEmail())
+            .password(passwordEncoder.encode(signUpRequest.getPassword()))
+            .roles(Collections.singleton(userRole))
+            .build();
 
-    return result;
+    return userRepository.save(user);
   }
 
   public void deleteUser(UserPrincipal currentUser, Long userId) {
-    if (userId != currentUser.getId()) {
+    if (!userId.equals(currentUser.getId())) {
       throw new BadRequestException("Permission denied");
     }
     userRepository.deleteById(userId);

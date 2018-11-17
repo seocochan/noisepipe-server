@@ -1,10 +1,7 @@
 package com.noisepipe.server.model;
 
 import com.noisepipe.server.model.audit.DateAudit;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -25,6 +22,8 @@ import java.util.Set;
                 "email"
         })
 })
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -57,6 +56,7 @@ public class User extends DateAudit {
   @JoinTable(name = "users_roles",
           joinColumns = @JoinColumn(name = "user_id"),
           inverseJoinColumns = @JoinColumn(name = "role_id"))
+  @Builder.Default
   private Set<Role> roles = new HashSet<>();
 
   @OneToMany(
@@ -64,6 +64,7 @@ public class User extends DateAudit {
           cascade = CascadeType.ALL,
           orphanRemoval = true
   )
+  @Builder.Default
   private List<Collection> collections = new ArrayList<>();
 
   @OneToMany(
@@ -71,6 +72,7 @@ public class User extends DateAudit {
           cascade = CascadeType.ALL,
           orphanRemoval = true
   )
+  @Builder.Default
   private List<Comment> comments = new ArrayList<>();
 
   @OneToMany(
@@ -78,14 +80,8 @@ public class User extends DateAudit {
           cascade = CascadeType.ALL,
           orphanRemoval = true
   )
+  @Builder.Default
   private List<Bookmark> bookmarks = new ArrayList<>();
-
-  public User(String name, String username, String email, String password) {
-    this.name = name;
-    this.username = username;
-    this.email = email;
-    this.password = password;
-  }
 
   public void addCollection(Collection collection) {
     collections.add(collection);

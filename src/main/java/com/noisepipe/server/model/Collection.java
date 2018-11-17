@@ -1,9 +1,7 @@
 package com.noisepipe.server.model;
 
 import com.noisepipe.server.model.audit.DateAudit;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -13,6 +11,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "collections")
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -35,6 +35,7 @@ public class Collection extends DateAudit {
           orphanRemoval = true
   )
   @Size(max = 100)
+  @Builder.Default
   private List<Item> items = new ArrayList<>();
 
   @ManyToOne(optional = false)
@@ -46,6 +47,7 @@ public class Collection extends DateAudit {
           cascade = CascadeType.ALL,
           orphanRemoval = true
   )
+  @Builder.Default
   private List<Comment> comments = new ArrayList<>();
 
   @OneToMany(
@@ -53,20 +55,15 @@ public class Collection extends DateAudit {
           cascade = CascadeType.ALL,
           orphanRemoval = true
   )
+  @Builder.Default
   private List<Bookmark> bookmarks = new ArrayList<>();
 
   @ManyToMany(
           mappedBy = "collections",
           fetch = FetchType.LAZY
   )
+  @Builder.Default
   private List<Tag> tags = new ArrayList<>();
-
-  public Collection(String title, String description, User user, List<Tag> tags) {
-    this.title = title;
-    this.description = description;
-    this.user = user;
-    this.tags = tags;
-  }
 
   public void addItem(Item item) {
     items.add(item);

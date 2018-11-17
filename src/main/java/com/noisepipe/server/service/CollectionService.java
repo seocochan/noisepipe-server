@@ -9,26 +9,25 @@ import com.noisepipe.server.payload.CollectionResponse;
 import com.noisepipe.server.repository.CollectionRepository;
 import com.noisepipe.server.repository.UserRepository;
 import com.noisepipe.server.utils.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class CollectionService {
 
-  @Autowired
-  private UserRepository userRepository;
-
-  @Autowired
-  private CollectionRepository collectionRepository;
+  private final UserRepository userRepository;
+  private final CollectionRepository collectionRepository;
 
   @Transactional
   public void createCollection(Long userId, CollectionRequest collectionRequest) {
     User user = userRepository.findById(userId)
             .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-    Collection collection = new Collection(
-            collectionRequest.getTitle(), collectionRequest.getDescription(), null, null);
-
+    Collection collection = Collection.builder()
+            .title(collectionRequest.getTitle())
+            .description(collectionRequest.getDescription())
+            .build();
     user.addCollection(collection);
   }
 
@@ -43,7 +42,7 @@ public class CollectionService {
   public void updateCollectionById(Long userId, Long collectionId, CollectionRequest collectionRequest) {
     Collection collection = collectionRepository.findById(collectionId)
             .orElseThrow(() -> new ResourceNotFoundException("Collection", "id", collectionId));
-    if (userId != collection.getUser().getId()) {
+    if (!userId.equals(collection.getUser().getId())) {
       throw new BadRequestException("Permission denied");
     }
 
@@ -54,12 +53,10 @@ public class CollectionService {
   public void removeCollectionById(Long userId, Long collectionId) {
     Collection collection = collectionRepository.findById(collectionId)
             .orElseThrow(() -> new ResourceNotFoundException("Collection", "id", collectionId));
-    if (userId != collection.getUser().getId()) {
+    if (!userId.equals(collection.getUser().getId())) {
       throw new BadRequestException("Permission denied");
     }
 
     collectionRepository.delete(collection);
   }
-
-
 }
