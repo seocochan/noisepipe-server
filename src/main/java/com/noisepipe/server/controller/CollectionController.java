@@ -69,10 +69,4 @@ public class CollectionController {
 
     return ResponseEntity.ok(new ApiResponse(true, "Successfully removed a collection"));
   }
-
-  /* TODO
-  @GetMapping("/?userId=?")
-  public PagedResponse<?> getCollectionsCreatedBy() {}
-  */
-
 }
