@@ -3,7 +3,7 @@ package com.noisepipe.server.config;
 import com.noisepipe.server.security.CustomUserDetailsService;
 import com.noisepipe.server.security.JwtAuthenticationEntryPoint;
 import com.noisepipe.server.security.JwtAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -26,13 +26,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         jsr250Enabled = true,
         prePostEnabled = true
 )
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Autowired
-  CustomUserDetailsService customUserDetailsService;
-
-  @Autowired
-  private JwtAuthenticationEntryPoint unauthorizedHandler;
+  private final CustomUserDetailsService customUserDetailsService;
+  private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
   @Bean
   public JwtAuthenticationFilter jwtAuthenticationFilter() {

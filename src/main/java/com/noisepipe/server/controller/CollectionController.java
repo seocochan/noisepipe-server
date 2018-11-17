@@ -7,9 +7,7 @@ import com.noisepipe.server.payload.CollectionResponse;
 import com.noisepipe.server.security.CurrentUser;
 import com.noisepipe.server.security.UserPrincipal;
 import com.noisepipe.server.service.CollectionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +15,10 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/collections")
+@RequiredArgsConstructor
 public class CollectionController {
 
-  @Autowired
-  private CollectionService collectionService;
-
-  private static final Logger logger = LoggerFactory.getLogger(CollectionController.class);
+  private final CollectionService collectionService;
 
   @PostMapping
   public ResponseEntity<ApiResponse> createCollection(@CurrentUser UserPrincipal currentUser,
@@ -73,4 +69,10 @@ public class CollectionController {
 
     return ResponseEntity.ok(new ApiResponse(true, "Successfully removed a collection"));
   }
+
+  /* TODO
+  @GetMapping("/?userId=?")
+  public PagedResponse<?> getCollectionsCreatedBy() {}
+  */
+
 }
