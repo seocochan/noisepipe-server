@@ -1,6 +1,7 @@
 package com.noisepipe.server.payload;
 
 import lombok.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -20,5 +21,10 @@ public class PagedResponse<T> {
 
   public boolean isLast() {
     return last;
+  }
+
+  public static <T> PagedResponse<T> of(List<T> content, Page<?> page) {
+    return new PagedResponse<>(content,
+            page.getNumber(), page.getSize(), page.getTotalElements(), page.getTotalPages(), page.isLast());
   }
 }

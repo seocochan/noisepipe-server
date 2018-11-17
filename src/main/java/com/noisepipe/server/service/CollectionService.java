@@ -6,12 +6,17 @@ import com.noisepipe.server.model.Collection;
 import com.noisepipe.server.model.User;
 import com.noisepipe.server.payload.CollectionRequest;
 import com.noisepipe.server.payload.CollectionResponse;
+import com.noisepipe.server.payload.PagedResponse;
 import com.noisepipe.server.repository.CollectionRepository;
 import com.noisepipe.server.repository.UserRepository;
 import com.noisepipe.server.utils.ModelMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -58,5 +63,16 @@ public class CollectionService {
     }
 
     collectionRepository.delete(collection);
+  }
+
+  public PagedResponse<CollectionResponse> getCollectionsByUsername(String username, int page, int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+    Page<Collection> collectionPage = collectionRepository.findByUserUsername(username, pageable);
+
+    if (collectionPage.getNumberOfElements() == 0) {
+      return PagedResponse.of(Collections.emptyList(), collectionPage);
+    }
+    List<CollectionResponse> collectionResponses = collectionPage.map(ModelMapper::map).getContent();
+    return PagedResponse.of(collectionResponses, collectionPage);
   }
 }
