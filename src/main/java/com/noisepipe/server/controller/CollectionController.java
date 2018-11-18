@@ -1,6 +1,5 @@
 package com.noisepipe.server.controller;
 
-import com.noisepipe.server.exception.BadRequestException;
 import com.noisepipe.server.payload.ApiResponse;
 import com.noisepipe.server.payload.CollectionRequest;
 import com.noisepipe.server.payload.CollectionResponse;
@@ -21,43 +20,25 @@ public class CollectionController {
   private final CollectionService collectionService;
 
   @GetMapping("/{collectionId}")
-  public ResponseEntity<CollectionResponse> getCollectionById(@PathVariable String collectionId) {
-    Long _collectionId;
-    try {
-      _collectionId = Long.valueOf(collectionId);
-    } catch (Exception e) {
-      throw new BadRequestException("Invalid variable", e);
-    }
-    CollectionResponse collectionResponse = collectionService.getCollectionById(_collectionId);
+  public ResponseEntity<CollectionResponse> getCollectionById(@PathVariable Long collectionId) {
+    CollectionResponse collectionResponse = collectionService.getCollectionById(collectionId);
 
     return ResponseEntity.ok(collectionResponse);
   }
 
   @PutMapping("/{collectionId}")
   public ResponseEntity<ApiResponse> updateCollectionById(@CurrentUser UserPrincipal currentUser,
-                                                          @PathVariable String collectionId,
+                                                          @PathVariable Long collectionId,
                                                           @Valid @RequestBody CollectionRequest collectionRequest) {
-    Long _collectionId;
-    try {
-      _collectionId = Long.valueOf(collectionId);
-    } catch (Exception e) {
-      throw new BadRequestException("Invalid variable", e);
-    }
-    collectionService.updateCollectionById(currentUser.getId(), _collectionId, collectionRequest);
+    collectionService.updateCollectionById(currentUser.getId(), collectionId, collectionRequest);
 
     return ResponseEntity.ok(new ApiResponse(true, "Successfully updated a collection"));
   }
 
   @DeleteMapping("/{collectionId}")
   public ResponseEntity<ApiResponse> removeCollectionById(@CurrentUser UserPrincipal currentUser,
-                                                          @PathVariable String collectionId) {
-    Long _collectionId;
-    try {
-      _collectionId = Long.valueOf(collectionId);
-    } catch (Exception e) {
-      throw new BadRequestException("Invalid variable", e);
-    }
-    collectionService.removeCollectionById(currentUser.getId(), _collectionId);
+                                                          @PathVariable Long collectionId) {
+    collectionService.removeCollectionById(currentUser.getId(), collectionId);
 
     return ResponseEntity.ok(new ApiResponse(true, "Successfully removed a collection"));
   }

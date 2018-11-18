@@ -1,6 +1,5 @@
 package com.noisepipe.server.controller;
 
-import com.noisepipe.server.exception.BadRequestException;
 import com.noisepipe.server.payload.ApiResponse;
 import com.noisepipe.server.payload.CommentRequest;
 import com.noisepipe.server.payload.CommentResponse;
@@ -32,17 +31,10 @@ public class CollectionCommentsController {
   }
 
   @GetMapping
-  public PagedResponse<CommentResponse> getCommentsByCollectionId(
-          @PathVariable String collectionId,
+  public PagedResponse<CommentResponse> getCommentsByCollection(
+          @PathVariable Long collectionId,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
-    Long _collectionId;
-    try {
-      _collectionId = Long.valueOf(collectionId);
-    } catch (Exception e) {
-      throw new BadRequestException("Invalid variable", e);
-    }
-
-    return commentService.getCommentsByCollectionId(_collectionId, page, size);
+    return commentService.getCommentsByCollection(collectionId, page, size);
   }
 }

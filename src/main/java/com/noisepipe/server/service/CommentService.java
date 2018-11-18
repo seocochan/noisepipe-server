@@ -65,9 +65,9 @@ public class CommentService {
     commentRepository.delete(comment);
   }
 
-  public PagedResponse<CommentResponse> getCommentsByUsername(String username, int page, int size) {
+  public PagedResponse<CommentResponse> getCommentsByUser(Long userId, int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
-    Page<Comment> commentPage = commentRepository.findByUserUsername(username, pageable);
+    Page<Comment> commentPage = commentRepository.findByUserId(userId, pageable);
 
     if (commentPage.getNumberOfElements() == 0) {
       return PagedResponse.of(Collections.emptyList(), commentPage);
@@ -76,7 +76,7 @@ public class CommentService {
     return PagedResponse.of(collectionResponses, commentPage);
   }
 
-  public PagedResponse<CommentResponse> getCommentsByCollectionId(Long collectionId, int page, int size) {
+  public PagedResponse<CommentResponse> getCommentsByCollection(Long collectionId, int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "createdAt");
     Page<Comment> commentPage = commentRepository.findByCollectionId(collectionId, pageable);
 

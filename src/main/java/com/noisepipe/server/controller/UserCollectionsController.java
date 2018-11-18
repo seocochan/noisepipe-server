@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/users/{username}/collections")
+@RequestMapping("/api/users/{userId}/collections")
 @RequiredArgsConstructor
 public class UserCollectionsController {
 
@@ -24,9 +24,9 @@ public class UserCollectionsController {
 
   @PostMapping
   public ResponseEntity<ApiResponse> createCollection(@CurrentUser UserPrincipal currentUser,
-                                                      @PathVariable String username,
+                                                      @PathVariable Long userId,
                                                       @Valid @RequestBody CollectionRequest collectionRequest) {
-    if (!username.equals(currentUser.getUsername())) {
+    if (!userId.equals(currentUser.getId())) {
       throw new BadRequestException("Permission denied");
     }
     collectionService.createCollection(currentUser.toUser(), collectionRequest);
@@ -35,10 +35,10 @@ public class UserCollectionsController {
   }
 
   @GetMapping
-  public PagedResponse<CollectionResponse> getCollectionsByUsername(
-          @PathVariable String username,
+  public PagedResponse<CollectionResponse> getCollectionsByUser(
+          @PathVariable Long userId,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
-    return collectionService.getCollectionsByUsername(username, page, size);
+    return collectionService.getCollectionsByUser(userId, page, size);
   }
 }
