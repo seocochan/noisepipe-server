@@ -4,6 +4,7 @@ import com.noisepipe.server.payload.*;
 import com.noisepipe.server.security.CurrentUser;
 import com.noisepipe.server.security.UserPrincipal;
 import com.noisepipe.server.service.UserService;
+import com.noisepipe.server.utils.ModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,7 @@ public class UserController {
   @GetMapping("/me")
   @PreAuthorize("hasRole('USER')")
   public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
-    UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getName());
-
-    return userSummary;
+    return ModelMapper.mapToSummary(currentUser.toUser());
   }
 
   @GetMapping("/checkUsernameAvailability")
