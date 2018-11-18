@@ -33,7 +33,7 @@ public class CollectionController {
     return ResponseEntity.ok(collectionResponse);
   }
 
-  @PutMapping("{collectionId}")
+  @PutMapping("/{collectionId}")
   public ResponseEntity<ApiResponse> updateCollectionById(@CurrentUser UserPrincipal currentUser,
                                                           @PathVariable String collectionId,
                                                           @Valid @RequestBody CollectionRequest collectionRequest) {
