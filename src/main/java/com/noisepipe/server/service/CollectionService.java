@@ -8,7 +8,6 @@ import com.noisepipe.server.payload.CollectionRequest;
 import com.noisepipe.server.payload.CollectionResponse;
 import com.noisepipe.server.payload.PagedResponse;
 import com.noisepipe.server.repository.CollectionRepository;
-import com.noisepipe.server.repository.UserRepository;
 import com.noisepipe.server.utils.ModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -22,18 +21,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CollectionService {
 
-  private final UserRepository userRepository;
   private final CollectionRepository collectionRepository;
 
-  @Transactional
-  public void createCollection(Long userId, CollectionRequest collectionRequest) {
-    User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+  public void createCollection(User user, CollectionRequest collectionRequest) {
     Collection collection = Collection.builder()
+            .user(user)
             .title(collectionRequest.getTitle())
             .description(collectionRequest.getDescription())
             .build();
-    user.addCollection(collection);
+
+    collectionRepository.save(collection);
   }
 
   public CollectionResponse getCollectionById(Long collectionId) {

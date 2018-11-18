@@ -29,7 +29,7 @@ public class UserCollectionsController {
     if (!username.equals(currentUser.getUsername())) {
       throw new BadRequestException("Permission denied");
     }
-    collectionService.createCollection(currentUser.getId(), collectionRequest);
+    collectionService.createCollection(currentUser.toUser(), collectionRequest);
 
     return ResponseEntity.ok(new ApiResponse(true, "Successfully created a collection"));
   }
