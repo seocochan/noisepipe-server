@@ -1,22 +1,23 @@
 package com.noisepipe.server.model;
 
-import com.noisepipe.server.model.audit.DateAudit;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.noisepipe.server.model.audit.UserDateAudit;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "items") // FIXME: unique(collection_id & position)
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Item extends DateAudit {
+public class Item extends UserDateAudit {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +38,7 @@ public class Item extends DateAudit {
 
   private String startAt;
 
-  // @NotBlank
+  @NotNull
   private Double position;
 
   @ManyToOne(optional = false)
@@ -48,6 +49,7 @@ public class Item extends DateAudit {
           mappedBy = "items",
           fetch = FetchType.LAZY
   )
+  @Builder.Default
   private List<Tag> tags = new ArrayList<>();
 
   public void addTag(Tag tag) {
