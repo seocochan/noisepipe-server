@@ -20,14 +20,6 @@ public class CollectionController {
 
   private final CollectionService collectionService;
 
-  @PostMapping
-  public ResponseEntity<ApiResponse> createCollection(@CurrentUser UserPrincipal currentUser,
-                                                      @Valid @RequestBody CollectionRequest collectionRequest) {
-    collectionService.createCollection(currentUser.getId(), collectionRequest);
-
-    return ResponseEntity.ok(new ApiResponse(true, "Successfully created a collection"));
-  }
-
   @GetMapping("/{collectionId}")
   public ResponseEntity<CollectionResponse> getCollectionById(@PathVariable String collectionId) {
     Long _collectionId;
