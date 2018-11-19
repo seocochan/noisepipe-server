@@ -72,8 +72,8 @@ public class CommentService {
     if (commentPage.getNumberOfElements() == 0) {
       return PagedResponse.of(Collections.emptyList(), commentPage);
     }
-    List<CommentResponse> collectionResponses = commentPage.map(ModelMapper::map).getContent();
-    return PagedResponse.of(collectionResponses, commentPage);
+    List<CommentResponse> commentResponses = commentPage.map(ModelMapper::map).getContent();
+    return PagedResponse.of(commentResponses, commentPage);
   }
 
   public PagedResponse<CommentResponse> getCommentsByCollection(Long collectionId, int page, int size) {
@@ -83,7 +83,7 @@ public class CommentService {
     if (commentPage.getNumberOfElements() == 0) {
       return PagedResponse.of(Collections.emptyList(), commentPage);
     }
-    List<CommentResponse> collectionResponses = commentPage.map(ModelMapper::map).getContent();
-    return PagedResponse.of(collectionResponses, commentPage);
+    List<CommentResponse> commentResponses = commentPage.map(ModelMapper::map).getContent();
+    return PagedResponse.of(commentResponses, commentPage);
   }
 }
