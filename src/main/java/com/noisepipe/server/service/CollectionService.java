@@ -6,7 +6,9 @@ import com.noisepipe.server.model.Collection;
 import com.noisepipe.server.model.User;
 import com.noisepipe.server.payload.CollectionRequest;
 import com.noisepipe.server.payload.CollectionResponse;
+import com.noisepipe.server.payload.CollectionSummary;
 import com.noisepipe.server.payload.PagedResponse;
+import com.noisepipe.server.repository.BookmarkRepository;
 import com.noisepipe.server.repository.CollectionRepository;
 import com.noisepipe.server.utils.ModelMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import java.util.List;
 public class CollectionService {
 
   private final CollectionRepository collectionRepository;
+  private final BookmarkRepository bookmarkRepository;
 
   public void createCollection(User user, CollectionRequest collectionRequest) {
     Collection collection = Collection.builder()
@@ -33,11 +36,13 @@ public class CollectionService {
     collectionRepository.save(collection);
   }
 
-  public CollectionResponse getCollectionById(Long collectionId) {
+  public CollectionResponse getCollectionById(Long userId, Long collectionId) {
     Collection collection = collectionRepository.findById(collectionId)
             .orElseThrow(() -> new ResourceNotFoundException("Collection", "id", collectionId));
+    Boolean isBookmarked = userId == null ? false
+            : bookmarkRepository.existsByUserIdAndCollectionId(userId, collectionId);
 
-    return ModelMapper.map(collection);
+    return ModelMapper.map(collection, isBookmarked);
   }
 
   @Transactional
@@ -62,14 +67,14 @@ public class CollectionService {
     collectionRepository.delete(collection);
   }
 
-  public PagedResponse<CollectionResponse> getCollectionsByUser(Long userId, int page, int size) {
+  public PagedResponse<CollectionSummary> getCollectionsByUser(Long userId, int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
     Page<Collection> collectionPage = collectionRepository.findByUserId(userId, pageable);
 
     if (collectionPage.getNumberOfElements() == 0) {
       return PagedResponse.of(Collections.emptyList(), collectionPage);
     }
-    List<CollectionResponse> collectionResponses = collectionPage.map(ModelMapper::map).getContent();
+    List<CollectionSummary> collectionResponses = collectionPage.map(ModelMapper::mapToSummary).getContent();
     return PagedResponse.of(collectionResponses, collectionPage);
   }
 }

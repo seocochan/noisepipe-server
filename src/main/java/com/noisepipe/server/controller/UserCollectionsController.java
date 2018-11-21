@@ -3,7 +3,7 @@ package com.noisepipe.server.controller;
 import com.noisepipe.server.exception.BadRequestException;
 import com.noisepipe.server.payload.ApiResponse;
 import com.noisepipe.server.payload.CollectionRequest;
-import com.noisepipe.server.payload.CollectionResponse;
+import com.noisepipe.server.payload.CollectionSummary;
 import com.noisepipe.server.payload.PagedResponse;
 import com.noisepipe.server.security.CurrentUser;
 import com.noisepipe.server.security.UserPrincipal;
@@ -35,7 +35,7 @@ public class UserCollectionsController {
   }
 
   @GetMapping
-  public PagedResponse<CollectionResponse> getCollectionsByUser(
+  public PagedResponse<CollectionSummary> getCollectionsByUser(
           @PathVariable Long userId,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {

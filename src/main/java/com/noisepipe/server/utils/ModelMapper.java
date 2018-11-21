@@ -19,9 +19,15 @@ public class ModelMapper {
   }
 
   // map()
-  public static CollectionResponse map(Collection collection) {
-    return new CollectionResponse(collection.getId(), collection.getTitle(), collection.getDescription(),
-            ModelMapper.mapToSummary(collection.getUser()));
+  public static CollectionResponse map(Collection collection, Boolean isBookmarked) {
+    return CollectionResponse.builder()
+            .id(collection.getId())
+            .title(collection.getTitle())
+            .description(collection.getTitle())
+            .createdBy(ModelMapper.mapToSummary(collection.getUser()))
+            .bookmarks(collection.getBookmarks().size())
+            .isBookmarked(isBookmarked)
+            .build();
   }
 
   public static CommentResponse map(Comment comment) {

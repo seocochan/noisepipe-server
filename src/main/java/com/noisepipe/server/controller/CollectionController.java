@@ -20,8 +20,10 @@ public class CollectionController {
   private final CollectionService collectionService;
 
   @GetMapping("/{collectionId}")
-  public ResponseEntity<CollectionResponse> getCollectionById(@PathVariable Long collectionId) {
-    CollectionResponse collectionResponse = collectionService.getCollectionById(collectionId);
+  public ResponseEntity<CollectionResponse> getCollectionById(@CurrentUser UserPrincipal currentUser,
+                                                              @PathVariable Long collectionId) {
+    Long userId = currentUser == null ? null : currentUser.getId();
+    CollectionResponse collectionResponse = collectionService.getCollectionById(userId, collectionId);
 
     return ResponseEntity.ok(collectionResponse);
   }

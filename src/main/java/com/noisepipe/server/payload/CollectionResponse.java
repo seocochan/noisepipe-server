@@ -1,10 +1,8 @@
 package com.noisepipe.server.payload;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -14,8 +12,7 @@ public class CollectionResponse {
   private String title;
   private String description;
   private UserSummary createdBy;
-  // private List<ItemResponse> items;
-  // private List<CommentResponse> comments;
-  // private Integer bookmarks;
+  private int bookmarks;
+  private Boolean isBookmarked;
   // private List<TagResponse> tags;
 }

@@ -14,4 +14,5 @@ public class CollectionSummary {
   private String title;
   private String description;
   private UserSummary createdBy;
+  // private int items;
 }
