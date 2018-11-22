@@ -1,10 +1,11 @@
 package com.noisepipe.server.payload;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -16,7 +17,8 @@ public class ItemResponse {
   private String sourceUrl;
   private String sourceProvider;
   private String startAt;
-  // private List<Tag> tags;
+  @Builder.Default
+  private List<String> tags = new ArrayList<>();
   private Double position;
   private Long createdBy;
   private Long collectionId;

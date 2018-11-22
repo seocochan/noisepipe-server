@@ -2,6 +2,9 @@ package com.noisepipe.server.payload;
 
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,7 +15,8 @@ public class CollectionResponse {
   private String title;
   private String description;
   private UserSummary createdBy;
+  @Builder.Default
+  private List<String> tags = new ArrayList<>();
   private int bookmarks;
   private Boolean isBookmarked;
-  // private List<TagResponse> tags;
 }

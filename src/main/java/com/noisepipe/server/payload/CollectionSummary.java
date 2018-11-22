@@ -1,10 +1,8 @@
 package com.noisepipe.server.payload;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -13,6 +11,6 @@ public class CollectionSummary {
   private Long id;
   private String title;
   private String description;
+  private int items;
   private UserSummary createdBy;
-  // private int items;
 }

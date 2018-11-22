@@ -2,6 +2,7 @@ package com.noisepipe.server.model;
 
 import com.noisepipe.server.model.audit.UserDateAudit;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -54,6 +55,7 @@ public class Item extends UserDateAudit {
           inverseJoinColumns = @JoinColumn(name = "tag_id"),
           uniqueConstraints = {@UniqueConstraint(columnNames = {"item_id", "tag_id"})}
   )
+  @BatchSize(size = 30)
   @Size(max = 5)
   @Builder.Default
   private List<Tag> tags = new ArrayList<>();

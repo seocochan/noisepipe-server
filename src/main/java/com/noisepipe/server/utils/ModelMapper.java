@@ -1,10 +1,9 @@
 package com.noisepipe.server.utils;
 
-import com.noisepipe.server.model.Collection;
-import com.noisepipe.server.model.Comment;
-import com.noisepipe.server.model.Item;
-import com.noisepipe.server.model.User;
+import com.noisepipe.server.model.*;
 import com.noisepipe.server.payload.*;
+
+import java.util.stream.Collectors;
 
 public class ModelMapper {
 
@@ -14,8 +13,13 @@ public class ModelMapper {
   }
 
   public static CollectionSummary mapToSummary(Collection collection) {
-    return new CollectionSummary(collection.getId(), collection.getTitle(), collection.getDescription(),
-            ModelMapper.mapToSummary(collection.getUser()));
+    return CollectionSummary.builder()
+            .id(collection.getId())
+            .title(collection.getTitle())
+            .description(collection.getDescription())
+            .items(collection.getItems().size())
+            .createdBy(ModelMapper.mapToSummary(collection.getUser()))
+            .build();
   }
 
   // map()
@@ -25,6 +29,7 @@ public class ModelMapper {
             .title(collection.getTitle())
             .description(collection.getTitle())
             .createdBy(ModelMapper.mapToSummary(collection.getUser()))
+            .tags(collection.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
             .bookmarks(collection.getBookmarks().size())
             .isBookmarked(isBookmarked)
             .build();
@@ -36,8 +41,17 @@ public class ModelMapper {
   }
 
   public static ItemResponse map(Item item) {
-    return new ItemResponse(item.getId(), item.getTitle(), item.getDescription(), item.getSourceUrl(),
-            item.getSourceProvider(), item.getStartAt(), item.getPosition(), item.getCreatedBy(),
-            item.getCollection().getId());
+    return ItemResponse.builder()
+            .id(item.getId())
+            .title(item.getTitle())
+            .description(item.getDescription())
+            .sourceUrl(item.getSourceUrl())
+            .sourceProvider(item.getSourceProvider())
+            .startAt(item.getStartAt())
+            .tags(item.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
+            .position(item.getPosition())
+            .createdBy(item.getCreatedBy())
+            .collectionId(item.getCollection().getId())
+            .build();
   }
 }

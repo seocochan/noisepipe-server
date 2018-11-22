@@ -2,6 +2,7 @@ package com.noisepipe.server.model;
 
 import com.noisepipe.server.model.audit.DateAudit;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -34,6 +35,7 @@ public class Collection extends DateAudit {
           cascade = CascadeType.ALL,
           orphanRemoval = true
   )
+  @BatchSize(size = 30)
   @Size(max = 100)
   @Builder.Default
   private List<Item> items = new ArrayList<>();
@@ -67,6 +69,7 @@ public class Collection extends DateAudit {
           inverseJoinColumns = @JoinColumn(name = "tag_id"),
           uniqueConstraints = {@UniqueConstraint(columnNames = {"collection_id", "tag_id"})}
   )
+  @BatchSize(size = 30)
   @Size(max = 5)
   @Builder.Default
   private List<Tag> tags = new ArrayList<>();
