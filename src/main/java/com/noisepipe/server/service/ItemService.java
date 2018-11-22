@@ -85,7 +85,18 @@ public class ItemService {
     if (itemPage.getNumberOfElements() == 0) {
       return PagedResponse.of(Collections.emptyList(), itemPage);
     }
-    List<ItemResponse> collectionResponses = itemPage.map(ModelMapper::map).getContent();
-    return PagedResponse.of(collectionResponses, itemPage);
+    List<ItemResponse> itemResponses = itemPage.map(ModelMapper::map).getContent();
+    return PagedResponse.of(itemResponses, itemPage);
+  }
+
+  public PagedResponse<ItemResponse> getItemsByTagName(String tagName, int page, int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+    Page<Item> itemPage = itemRepository.findByTagName(tagName, pageable);
+
+    if (itemPage.getNumberOfElements() == 0) {
+      return PagedResponse.of(Collections.emptyList(), itemPage);
+    }
+    List<ItemResponse> itemResponses = itemPage.map(ModelMapper::map).getContent();
+    return PagedResponse.of(itemResponses, itemPage);
   }
 }

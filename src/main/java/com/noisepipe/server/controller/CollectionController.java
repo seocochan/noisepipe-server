@@ -1,11 +1,10 @@
 package com.noisepipe.server.controller;
 
-import com.noisepipe.server.payload.ApiResponse;
-import com.noisepipe.server.payload.CollectionRequest;
-import com.noisepipe.server.payload.CollectionResponse;
+import com.noisepipe.server.payload.*;
 import com.noisepipe.server.security.CurrentUser;
 import com.noisepipe.server.security.UserPrincipal;
 import com.noisepipe.server.service.CollectionService;
+import com.noisepipe.server.utils.AppConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +42,13 @@ public class CollectionController {
     collectionService.removeCollectionById(currentUser.getId(), collectionId);
 
     return ResponseEntity.ok(new ApiResponse(true, "Successfully removed a collection"));
+  }
+
+  @GetMapping
+  public PagedResponse<CollectionSummary> getCollectionsByTagName(
+          @RequestParam String tagName,
+          @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+          @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
+    return collectionService.getCollectionsByTagName(tagName, page, size);
   }
 }
