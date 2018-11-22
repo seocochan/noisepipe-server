@@ -60,8 +60,13 @@ public class ItemService {
     item.setTags(tagService.getOrCreateTags(itemRequest.getTags()));
   }
 
-  // TODO: public void updateItemPosition() {}
-  // item.setPosition(itemRequest.getPosition());
+  @Transactional
+  public void updateItemPositionById(Long userId, Long itemId, Double position) {
+    int updated = itemRepository.updatePosition(itemId, userId, position);
+    if (updated == 0) { // no items're updated, not matched to id or owned by current user
+      throw new BadRequestException("Permission denied");
+    }
+  }
 
   public void removeItemById(Long userId, Long itemId) {
     Item item = itemRepository.findById(itemId)

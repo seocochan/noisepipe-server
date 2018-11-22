@@ -27,6 +27,15 @@ public class ItemController {
     return ResponseEntity.ok(new ApiResponse(true, "Successfully updated a item"));
   }
 
+  @PutMapping("/{itemId}/position")
+  public ResponseEntity<ApiResponse> updateItemPositionById(@CurrentUser UserPrincipal currentUser,
+                                                            @PathVariable Long itemId,
+                                                            @RequestBody Double position) {
+    itemService.updateItemPositionById(currentUser.getId(), itemId, position);
+
+    return ResponseEntity.ok(new ApiResponse(true, "Successfully updated a item's position"));
+  }
+
   @DeleteMapping("/{itemId}")
   public ResponseEntity<ApiResponse> removeItemById(@CurrentUser UserPrincipal currentUser,
                                                     @PathVariable Long itemId) {
