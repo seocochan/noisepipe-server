@@ -27,6 +27,7 @@ public class ItemService {
 
   private final CollectionRepository collectionRepository;
   private final ItemRepository itemRepository;
+  private final TagService tagService;
 
   @Transactional
   public void createItem(Long userId, Long collectionId, ItemRequest itemRequest) {
@@ -40,6 +41,7 @@ public class ItemService {
             .collection(collection)
             .title(itemRequest.getTitle())
             .description(itemRequest.getDescription())
+            .tags(tagService.getOrCreateTags(itemRequest.getTags()))
             .position(itemRequest.getPosition())
             .build();
     itemRepository.save(item);
@@ -55,8 +57,11 @@ public class ItemService {
 
     item.setTitle(itemRequest.getTitle());
     item.setDescription(itemRequest.getDescription());
-    item.setPosition(itemRequest.getPosition());
+    item.setTags(tagService.getOrCreateTags(itemRequest.getTags()));
   }
+
+  // TODO: public void updateItemPosition() {}
+  // item.setPosition(itemRequest.getPosition());
 
   public void removeItemById(Long userId, Long itemId) {
     Item item = itemRepository.findById(itemId)

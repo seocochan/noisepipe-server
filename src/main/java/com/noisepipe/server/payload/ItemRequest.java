@@ -8,6 +8,8 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,7 +32,8 @@ public class ItemRequest {
 
   // private String startAt;
 
-  // private List<TagResponse> tags;
+  @Size(max = 5)
+  private List<@NotBlank @Size(max = 40) String> tags = new ArrayList<>();
 
   @NotNull
   private Double position;

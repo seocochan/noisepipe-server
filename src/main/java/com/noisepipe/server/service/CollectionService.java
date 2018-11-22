@@ -25,12 +25,15 @@ public class CollectionService {
 
   private final CollectionRepository collectionRepository;
   private final BookmarkRepository bookmarkRepository;
+  private final TagService tagService;
 
+  @Transactional
   public void createCollection(User user, CollectionRequest collectionRequest) {
     Collection collection = Collection.builder()
             .user(user)
             .title(collectionRequest.getTitle())
             .description(collectionRequest.getDescription())
+            .tags(tagService.getOrCreateTags(collectionRequest.getTags()))
             .build();
 
     collectionRepository.save(collection);
@@ -55,6 +58,7 @@ public class CollectionService {
 
     collection.setTitle(collectionRequest.getTitle());
     collection.setDescription(collectionRequest.getDescription());
+    collection.setTags(tagService.getOrCreateTags(collectionRequest.getTags()));
   }
 
   public void removeCollectionById(Long userId, Long collectionId) {

@@ -30,19 +30,15 @@ public class Tag extends DateAudit {
   @Size(max = 40)
   private String name;
 
-  @ManyToMany
-  @JoinTable(name = "tags_collections",
-          joinColumns = @JoinColumn(name = "tag_id"),
-          inverseJoinColumns = @JoinColumn(name = "collection_id"),
-          uniqueConstraints = {@UniqueConstraint(columnNames = {"tag_id", "collection_id"})}
+  @ManyToMany(
+          mappedBy = "tags",
+          fetch = FetchType.LAZY
   )
   private List<Collection> collections = new ArrayList<>();
 
-  @ManyToMany
-  @JoinTable(name = "tags_items",
-          joinColumns = @JoinColumn(name = "tag_id"),
-          inverseJoinColumns = @JoinColumn(name = "item_id"),
-          uniqueConstraints = {@UniqueConstraint(columnNames = {"tag_id", "item_id"})}
+  @ManyToMany(
+          mappedBy = "tags",
+          fetch = FetchType.LAZY
   )
   private List<Item> items = new ArrayList<>();
 

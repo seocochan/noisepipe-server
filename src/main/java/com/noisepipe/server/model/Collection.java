@@ -59,9 +59,15 @@ public class Collection extends DateAudit {
   private List<Bookmark> bookmarks = new ArrayList<>();
 
   @ManyToMany(
-          mappedBy = "collections",
+          cascade = CascadeType.PERSIST,
           fetch = FetchType.LAZY
   )
+  @JoinTable(name = "collections_tags",
+          joinColumns = @JoinColumn(name = "collection_id"),
+          inverseJoinColumns = @JoinColumn(name = "tag_id"),
+          uniqueConstraints = {@UniqueConstraint(columnNames = {"collection_id", "tag_id"})}
+  )
+  @Size(max = 5)
   @Builder.Default
   private List<Tag> tags = new ArrayList<>();
 

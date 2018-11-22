@@ -46,9 +46,15 @@ public class Item extends UserDateAudit {
   private Collection collection;
 
   @ManyToMany(
-          mappedBy = "items",
+          cascade = CascadeType.PERSIST,
           fetch = FetchType.LAZY
   )
+  @JoinTable(name = "items_tags",
+          joinColumns = @JoinColumn(name = "item_id"),
+          inverseJoinColumns = @JoinColumn(name = "tag_id"),
+          uniqueConstraints = {@UniqueConstraint(columnNames = {"item_id", "tag_id"})}
+  )
+  @Size(max = 5)
   @Builder.Default
   private List<Tag> tags = new ArrayList<>();
 
