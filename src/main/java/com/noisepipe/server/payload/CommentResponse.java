@@ -9,8 +9,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserSummary {
+public class CommentResponse {
   private Long id;
-  private String username;
-  private String name;
+  private String text;
+  private Integer depth;
+  private CollectionSummary collection;
+  private UserSummary createdBy;
 }

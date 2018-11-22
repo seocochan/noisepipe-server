@@ -1,16 +1,16 @@
 package com.noisepipe.server.model;
 
 import com.noisepipe.server.model.audit.DateAudit;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,9 +22,12 @@ import java.util.Set;
                 "email"
         })
 })
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class User extends DateAudit {
 
   @Id
@@ -50,15 +53,38 @@ public class User extends DateAudit {
   private String password;
 
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name = "user_roles",
+  @JoinTable(name = "users_roles",
           joinColumns = @JoinColumn(name = "user_id"),
           inverseJoinColumns = @JoinColumn(name = "role_id"))
+  @Builder.Default
   private Set<Role> roles = new HashSet<>();
 
-  public User(String name, String username, String email, String password) {
-    this.name = name;
-    this.username = username;
-    this.email = email;
-    this.password = password;
+  @OneToMany(
+          mappedBy = "user",
+          cascade = CascadeType.ALL,
+          orphanRemoval = true
+  )
+  @Builder.Default
+  private List<Collection> collections = new ArrayList<>();
+
+  @OneToMany(
+          mappedBy = "user",
+          cascade = CascadeType.ALL,
+          orphanRemoval = true
+  )
+  @Builder.Default
+  private List<Comment> comments = new ArrayList<>();
+
+  @OneToMany(
+          mappedBy = "user",
+          cascade = CascadeType.ALL,
+          orphanRemoval = true
+  )
+  @Builder.Default
+  private List<Bookmark> bookmarks = new ArrayList<>();
+
+  public void addCollection(Collection collection) {
+    collections.add(collection);
+    collection.setUser(this);
   }
 }
