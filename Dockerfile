@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:8-jre
 
 COPY ./target/noisepipe-server.jar app.jar
 
