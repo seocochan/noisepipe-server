@@ -12,7 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "items") // FIXME: unique(collection_id & position)
+@Table(name = "items", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {
+                "collection_id", "position"
+        })
+})
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
