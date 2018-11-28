@@ -2,6 +2,7 @@ package com.noisepipe.server.payload;
 
 import lombok.*;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,4 +23,6 @@ public class ItemResponse {
   private Double position;
   private Long createdBy;
   private Long collectionId;
+  private Instant createdAt;
+  private Instant updatedAt;
 }
