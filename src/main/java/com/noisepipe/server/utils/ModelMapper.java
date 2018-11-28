@@ -52,6 +52,8 @@ public class ModelMapper {
             .position(item.getPosition())
             .createdBy(item.getCreatedBy())
             .collectionId(item.getCollection().getId())
+            .createdAt(item.getCreatedAt())
+            .updatedAt(item.getUpdatedAt())
             .build();
   }
 }
