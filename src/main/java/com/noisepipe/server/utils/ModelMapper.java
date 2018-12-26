@@ -55,4 +55,13 @@ public class ModelMapper {
             .updatedAt(item.getUpdatedAt())
             .build();
   }
+
+  public static CueResponse map(Cue cue) {
+    return CueResponse.builder()
+            .id(cue.getId())
+            .seconds(cue.getSeconds())
+            .name(cue.getName())
+            .createdAt(cue.getCreatedAt())
+            .build();
+  }
 }

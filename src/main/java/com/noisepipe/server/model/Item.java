@@ -44,7 +44,7 @@ public class Item extends UserDateAudit {
   @NotNull
   private Double position;
 
-  @ManyToOne(optional = false)
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "collection_id", nullable = false)
   private Collection collection;
 
@@ -62,10 +62,26 @@ public class Item extends UserDateAudit {
   @Builder.Default
   private List<Tag> tags = new ArrayList<>();
 
+  @OneToMany(
+          cascade = CascadeType.ALL,
+          orphanRemoval = true
+  )
+  @JoinColumn(name = "item_id")
+  @OrderBy("seconds")
+  @Builder.Default
+  private List<Cue> cues = new ArrayList<>();
+
   public void addTag(Tag tag) {
     if (tags == null) {
       tags = new ArrayList<>();
     }
     tags.add(tag);
+  }
+
+  public void addCue(Cue cue) {
+    if (cues == null) {
+      cues = new ArrayList<>();
+    }
+    cues.add(cue);
   }
 }
