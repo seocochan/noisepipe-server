@@ -24,13 +24,11 @@ public class ItemRequest {
   @Size(max = 255)
   private String description;
 
-  // @NotBlank
-  // private String sourceUrl;
+  @NotBlank
+  private String sourceUrl;
 
   // @NotBlank
   // private String sourceProvider;
-
-  // private String startAt;
 
   @Size(max = 5)
   private List<@NotBlank @Size(max = 40) String> tags = new ArrayList<>();

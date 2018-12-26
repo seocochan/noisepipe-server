@@ -35,13 +35,11 @@ public class Item extends UserDateAudit {
   @Size(max = 255)
   private String description;
 
-  // @NotBlank
+  @NotBlank
   private String sourceUrl;
 
   // @NotBlank
   private String sourceProvider;
-
-  private String startAt;
 
   @NotNull
   private Double position;

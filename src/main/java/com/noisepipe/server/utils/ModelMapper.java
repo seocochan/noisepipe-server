@@ -47,7 +47,6 @@ public class ModelMapper {
             .description(item.getDescription())
             .sourceUrl(item.getSourceUrl())
             .sourceProvider(item.getSourceProvider())
-            .startAt(item.getStartAt())
             .tags(item.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
             .position(item.getPosition())
             .createdBy(item.getCreatedBy())

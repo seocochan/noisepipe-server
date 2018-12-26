@@ -17,7 +17,6 @@ public class ItemResponse {
   private String description;
   private String sourceUrl;
   private String sourceProvider;
-  private String startAt;
   @Builder.Default
   private List<String> tags = new ArrayList<>();
   private Double position;
