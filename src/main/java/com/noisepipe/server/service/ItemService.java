@@ -41,6 +41,7 @@ public class ItemService {
             .collection(collection)
             .title(itemRequest.getTitle())
             .description(itemRequest.getDescription())
+            .sourceUrl(itemRequest.getSourceUrl())
             .tags(tagService.getOrCreateTags(itemRequest.getTags()))
             .position(itemRequest.getPosition())
             .build();
@@ -57,6 +58,7 @@ public class ItemService {
 
     item.setTitle(itemRequest.getTitle());
     item.setDescription(itemRequest.getDescription());
+    item.setSourceUrl(itemRequest.getSourceUrl());
     item.setTags(tagService.getOrCreateTags(itemRequest.getTags()));
   }
 

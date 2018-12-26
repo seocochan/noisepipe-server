@@ -47,13 +47,21 @@ public class ModelMapper {
             .description(item.getDescription())
             .sourceUrl(item.getSourceUrl())
             .sourceProvider(item.getSourceProvider())
-            .startAt(item.getStartAt())
             .tags(item.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
             .position(item.getPosition())
             .createdBy(item.getCreatedBy())
             .collectionId(item.getCollection().getId())
             .createdAt(item.getCreatedAt())
             .updatedAt(item.getUpdatedAt())
+            .build();
+  }
+
+  public static CueResponse map(Cue cue) {
+    return CueResponse.builder()
+            .id(cue.getId())
+            .seconds(cue.getSeconds())
+            .name(cue.getName())
+            .createdAt(cue.getCreatedAt())
             .build();
   }
 }
