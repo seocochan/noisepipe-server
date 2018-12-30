@@ -1,7 +1,7 @@
 package com.noisepipe.server.controller;
 
 import com.noisepipe.server.payload.ApiResponse;
-import com.noisepipe.server.payload.ItemRequest;
+import com.noisepipe.server.payload.ItemPostRequest;
 import com.noisepipe.server.payload.ItemResponse;
 import com.noisepipe.server.payload.PagedResponse;
 import com.noisepipe.server.security.CurrentUser;
@@ -22,12 +22,10 @@ public class CollectionItemsController {
   private final ItemService itemService;
 
   @PostMapping
-  public ResponseEntity<ApiResponse> createItem(@CurrentUser UserPrincipal currentUser,
-                                                @PathVariable Long collectionId,
-                                                @Valid @RequestBody ItemRequest itemRequest) {
-    itemService.createItem(currentUser.getId(), collectionId, itemRequest);
-
-    return ResponseEntity.ok(new ApiResponse(true, "Successfully created a item"));
+  public ResponseEntity<ItemResponse> createItem(@CurrentUser UserPrincipal currentUser,
+                                                 @PathVariable Long collectionId,
+                                                 @Valid @RequestBody ItemPostRequest itemPostRequest) {
+    return ResponseEntity.ok(itemService.createItem(currentUser.getId(), collectionId, itemPostRequest));
   }
 
   @GetMapping

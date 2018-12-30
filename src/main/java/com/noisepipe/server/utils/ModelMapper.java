@@ -3,6 +3,7 @@ package com.noisepipe.server.utils;
 import com.noisepipe.server.model.*;
 import com.noisepipe.server.payload.*;
 
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class ModelMapper {
@@ -47,7 +48,9 @@ public class ModelMapper {
             .description(item.getDescription())
             .sourceUrl(item.getSourceUrl())
             .sourceProvider(item.getSourceProvider())
-            .tags(item.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
+            .tags(item.getTags() == null
+                    ? Collections.emptyList()
+                    : item.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
             .position(item.getPosition())
             .createdBy(item.getCreatedBy())
             .collectionId(item.getCollection().getId())

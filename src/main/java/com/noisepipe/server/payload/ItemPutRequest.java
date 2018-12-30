@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,24 +14,15 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ItemRequest {
+public class ItemPutRequest {
 
   @NotBlank
-  @Size(max = 40)
+  @Size(max = 100)
   private String title;
 
   @Size(max = 255)
   private String description;
 
-  @NotBlank
-  private String sourceUrl;
-
-  // @NotBlank
-  // private String sourceProvider;
-
   @Size(max = 5)
   private List<@NotBlank @Size(max = 40) String> tags = new ArrayList<>();
-
-  @NotNull
-  private Double position;
 }

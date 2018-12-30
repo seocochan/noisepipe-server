@@ -29,7 +29,7 @@ public class Item extends UserDateAudit {
   private Long id;
 
   @NotBlank
-  @Size(max = 40)
+  @Size(max = 100)
   private String title;
 
   @Size(max = 255)
@@ -38,7 +38,7 @@ public class Item extends UserDateAudit {
   @NotBlank
   private String sourceUrl;
 
-  // @NotBlank
+  @NotBlank
   private String sourceProvider;
 
   @NotNull
