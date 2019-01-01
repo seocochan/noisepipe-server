@@ -18,4 +18,9 @@ public class Parser {
     }
     return id;
   }
+
+  public static String convertSoundcloudUrl(URL url) {
+    // Remove unnecessary query strings and hashes
+    return "https://" + url.getHost() + url.getPath();
+  }
 }

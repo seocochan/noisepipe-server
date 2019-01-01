@@ -8,5 +8,6 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Item {
+  private String id;
   private Snippet snippet;
 }

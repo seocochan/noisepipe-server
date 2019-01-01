@@ -1,5 +1,6 @@
 package com.noisepipe.server.controller;
 
+import com.noisepipe.server.payload.media.MediaDataResponse;
 import com.noisepipe.server.payload.media.Provider;
 import com.noisepipe.server.service.MediaService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class MediaController {
   private final MediaService mediaService;
 
   @GetMapping
-  public ResponseEntity<String> getMediaData(@RequestParam URL url, @RequestParam Provider provider) {
+  public ResponseEntity<MediaDataResponse> getMediaData(@RequestParam URL url, @RequestParam Provider provider) {
     return ResponseEntity.ok(mediaService.getMediaData(url, provider));
   }
 }
