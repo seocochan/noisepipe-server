@@ -1,6 +1,7 @@
 package com.noisepipe.server.model;
 
 import com.noisepipe.server.model.audit.DateAudit;
+import com.noisepipe.server.utils.AppConstants;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,7 +28,7 @@ public class Tag extends DateAudit {
   private Long id;
 
   @NotBlank
-  @Size(max = 40)
+  @Size(max = AppConstants.MAX_TAG_NAME_LENGTH)
   private String name;
 
   @ManyToMany(

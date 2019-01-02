@@ -1,6 +1,7 @@
 package com.noisepipe.server.model;
 
 import com.noisepipe.server.model.audit.DateAudit;
+import com.noisepipe.server.utils.AppConstants;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,7 +23,7 @@ public class Comment extends DateAudit {
   private Long id;
 
   @NotBlank
-  @Size(max = 255)
+  @Size(max = AppConstants.MAX_COMMENT_TEXT_LENGTH)
   private String text;
 
   // 대댓글 작성시 부모 Comment.id

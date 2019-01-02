@@ -1,6 +1,7 @@
 package com.noisepipe.server.payload;
 
 import com.noisepipe.server.model.enums.Provider;
+import com.noisepipe.server.utils.AppConstants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import javax.validation.constraints.Size;
 public class ItemPostRequest {
 
   @NotBlank
-  @Size(max = 100)
+  @Size(max = AppConstants.MAX_ITEM_TITLE_LENGTH)
   private String title;
 
   @NotBlank

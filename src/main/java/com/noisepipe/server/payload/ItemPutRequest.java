@@ -1,5 +1,6 @@
 package com.noisepipe.server.payload;
 
+import com.noisepipe.server.utils.AppConstants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,12 +18,12 @@ import java.util.List;
 public class ItemPutRequest {
 
   @NotBlank
-  @Size(max = 100)
+  @Size(max = AppConstants.MAX_ITEM_TITLE_LENGTH)
   private String title;
 
-  @Size(max = 255)
+  @Size(max = AppConstants.MAX_ITEM_DESCRIPTION_LENGTH)
   private String description;
 
-  @Size(max = 5)
-  private List<@NotBlank @Size(max = 40) String> tags = new ArrayList<>();
+  @Size(max = AppConstants.MAX_ITEM_TAGS_SIZE)
+  private List<@NotBlank @Size(max = AppConstants.MAX_TAG_NAME_LENGTH) String> tags = new ArrayList<>();
 }

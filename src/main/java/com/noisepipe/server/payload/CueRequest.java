@@ -1,5 +1,6 @@
 package com.noisepipe.server.payload;
 
+import com.noisepipe.server.utils.AppConstants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,6 @@ public class CueRequest {
   @NotNull
   private Integer seconds;
 
-  @Size(max = 40)
+  @Size(max = AppConstants.MAX_CUE_NAME_LENGTH)
   private String name;
 }

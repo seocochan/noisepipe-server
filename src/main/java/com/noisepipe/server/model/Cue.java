@@ -1,6 +1,7 @@
 package com.noisepipe.server.model;
 
 import com.noisepipe.server.model.audit.UserDateAudit;
+import com.noisepipe.server.utils.AppConstants;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +27,6 @@ public class Cue extends UserDateAudit {
   @NotNull
   private Integer seconds;
 
-  @Size(max = 40)
+  @Size(max = AppConstants.MAX_CUE_NAME_LENGTH)
   private String name;
 }
