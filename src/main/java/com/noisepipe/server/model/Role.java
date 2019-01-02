@@ -1,5 +1,6 @@
 package com.noisepipe.server.model;
 
+import com.noisepipe.server.model.enums.RoleName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

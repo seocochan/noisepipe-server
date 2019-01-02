@@ -1,5 +1,6 @@
 package com.noisepipe.server.payload;
 
+import com.noisepipe.server.model.enums.Provider;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,8 +9,6 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,8 +23,8 @@ public class ItemPostRequest {
   @NotBlank
   private String sourceUrl;
 
-  @NotBlank
-  private String sourceProvider;
+  @NotNull
+  private Provider sourceProvider;
 
   @NotNull
   private Double position;

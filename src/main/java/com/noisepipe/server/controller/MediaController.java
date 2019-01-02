@@ -1,7 +1,7 @@
 package com.noisepipe.server.controller;
 
 import com.noisepipe.server.payload.media.MediaDataResponse;
-import com.noisepipe.server.payload.media.Provider;
+import com.noisepipe.server.model.enums.Provider;
 import com.noisepipe.server.service.MediaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

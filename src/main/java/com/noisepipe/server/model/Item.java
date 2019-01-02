@@ -1,6 +1,7 @@
 package com.noisepipe.server.model;
 
 import com.noisepipe.server.model.audit.UserDateAudit;
+import com.noisepipe.server.model.enums.Provider;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 
@@ -38,8 +39,9 @@ public class Item extends UserDateAudit {
   @NotBlank
   private String sourceUrl;
 
-  @NotBlank
-  private String sourceProvider;
+  @Enumerated(EnumType.STRING)
+  @NotNull
+  private Provider sourceProvider;
 
   @NotNull
   private Double position;
