@@ -22,7 +22,9 @@ phases:
       spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect\n
       spring.jpa.hibernate.ddl-auto=update\n
       logging.level.org.hibernate.SQL=DEBUG\n
-      app.jwtSecret='$JWT_SECRET > ./src/main/resources/application-dev.properties
+      app.jwtSecret='$JWT_SECRET'\n
+      media.youtube.clientKey='$YT_CLIENT_KEY'\n
+      media.soundcloud.clientKey='$SC_CLIENT_KEY > ./src/main/resources/application-dev.properties
     - cat ./src/main/resources/application-dev.properties
   pre_build:
     commands:
