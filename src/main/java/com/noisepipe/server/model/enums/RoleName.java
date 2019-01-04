@@ -1,4 +1,4 @@
-package com.noisepipe.server.model;
+package com.noisepipe.server.model.enums;
 
 public enum RoleName {
   ROLE_USER,

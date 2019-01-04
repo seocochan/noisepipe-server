@@ -3,6 +3,7 @@ package com.noisepipe.server.utils;
 import com.noisepipe.server.model.*;
 import com.noisepipe.server.payload.*;
 
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class ModelMapper {
@@ -19,6 +20,7 @@ public class ModelMapper {
             .description(collection.getDescription())
             .items(collection.getItems().size())
             .createdBy(ModelMapper.mapToSummary(collection.getUser()))
+            .createdAt(collection.getCreatedAt())
             .build();
   }
 
@@ -27,11 +29,12 @@ public class ModelMapper {
     return CollectionResponse.builder()
             .id(collection.getId())
             .title(collection.getTitle())
-            .description(collection.getTitle())
-            .createdBy(ModelMapper.mapToSummary(collection.getUser()))
+            .description(collection.getDescription())
             .tags(collection.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
             .bookmarks(collection.getBookmarks().size())
             .isBookmarked(isBookmarked)
+            .createdBy(ModelMapper.mapToSummary(collection.getUser()))
+            .createdAt(collection.getCreatedAt())
             .build();
   }
 
@@ -47,7 +50,9 @@ public class ModelMapper {
             .description(item.getDescription())
             .sourceUrl(item.getSourceUrl())
             .sourceProvider(item.getSourceProvider())
-            .tags(item.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
+            .tags(item.getTags() == null
+                    ? Collections.emptyList()
+                    : item.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
             .position(item.getPosition())
             .createdBy(item.getCreatedBy())
             .collectionId(item.getCollection().getId())

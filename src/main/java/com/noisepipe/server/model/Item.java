@@ -1,6 +1,8 @@
 package com.noisepipe.server.model;
 
 import com.noisepipe.server.model.audit.UserDateAudit;
+import com.noisepipe.server.model.enums.Provider;
+import com.noisepipe.server.utils.AppConstants;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 
@@ -29,17 +31,18 @@ public class Item extends UserDateAudit {
   private Long id;
 
   @NotBlank
-  @Size(max = 40)
+  @Size(max = AppConstants.MAX_ITEM_TITLE_LENGTH)
   private String title;
 
-  @Size(max = 255)
+  @Size(max = AppConstants.MAX_ITEM_DESCRIPTION_LENGTH)
   private String description;
 
   @NotBlank
   private String sourceUrl;
 
-  // @NotBlank
-  private String sourceProvider;
+  @Enumerated(EnumType.STRING)
+  @NotNull
+  private Provider sourceProvider;
 
   @NotNull
   private Double position;
@@ -57,8 +60,8 @@ public class Item extends UserDateAudit {
           inverseJoinColumns = @JoinColumn(name = "tag_id"),
           uniqueConstraints = {@UniqueConstraint(columnNames = {"item_id", "tag_id"})}
   )
-  @BatchSize(size = 30)
-  @Size(max = 5)
+  @BatchSize(size = AppConstants.DEFAULT_BATCH_SIZE)
+  @Size(max = AppConstants.MAX_ITEM_TAGS_SIZE)
   @Builder.Default
   private List<Tag> tags = new ArrayList<>();
 

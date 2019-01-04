@@ -2,6 +2,8 @@ package com.noisepipe.server.payload;
 
 import lombok.*;
 
+import java.time.Instant;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,4 +15,5 @@ public class CollectionSummary {
   private String description;
   private int items;
   private UserSummary createdBy;
+  private Instant createdAt;
 }

@@ -1,5 +1,6 @@
 package com.noisepipe.server.payload;
 
+import com.noisepipe.server.utils.AppConstants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import javax.validation.constraints.Size;
 public class CommentRequest {
 
   @NotBlank
-  @Size(max = 255)
+  @Size(max = AppConstants.MAX_COMMENT_TEXT_LENGTH)
   private String text;
 
   private Long replyTo;

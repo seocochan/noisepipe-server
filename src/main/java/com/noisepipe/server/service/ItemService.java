@@ -4,7 +4,8 @@ import com.noisepipe.server.exception.BadRequestException;
 import com.noisepipe.server.exception.ResourceNotFoundException;
 import com.noisepipe.server.model.Collection;
 import com.noisepipe.server.model.Item;
-import com.noisepipe.server.payload.ItemRequest;
+import com.noisepipe.server.payload.ItemPostRequest;
+import com.noisepipe.server.payload.ItemPutRequest;
 import com.noisepipe.server.payload.ItemResponse;
 import com.noisepipe.server.payload.PagedResponse;
 import com.noisepipe.server.repository.CollectionRepository;
@@ -30,7 +31,7 @@ public class ItemService {
   private final TagService tagService;
 
   @Transactional
-  public void createItem(Long userId, Long collectionId, ItemRequest itemRequest) {
+  public ItemResponse createItem(Long userId, Long collectionId, ItemPostRequest itemPostRequest) {
     Collection collection = collectionRepository.findById(collectionId)
             .orElseThrow(() -> new ResourceNotFoundException("Collection", "id", collectionId));
     if (!userId.equals(collection.getUser().getId())) {
@@ -39,27 +40,27 @@ public class ItemService {
 
     Item item = Item.builder()
             .collection(collection)
-            .title(itemRequest.getTitle())
-            .description(itemRequest.getDescription())
-            .sourceUrl(itemRequest.getSourceUrl())
-            .tags(tagService.getOrCreateTags(itemRequest.getTags()))
-            .position(itemRequest.getPosition())
+            .title(itemPostRequest.getTitle())
+            .sourceUrl(itemPostRequest.getSourceUrl())
+            .sourceProvider(itemPostRequest.getSourceProvider())
+            .position(itemPostRequest.getPosition())
             .build();
-    itemRepository.save(item);
+    Item newItem = itemRepository.save(item);
+    return ModelMapper.map(newItem);
   }
 
   @Transactional
-  public void updateItemById(Long userId, Long itemId, ItemRequest itemRequest) {
+  public ItemResponse updateItemById(Long userId, Long itemId, ItemPutRequest itemPutRequest) {
     Item item = itemRepository.findById(itemId)
             .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
     if (!userId.equals(item.getCreatedBy())) {
       throw new BadRequestException("Permission denied");
     }
 
-    item.setTitle(itemRequest.getTitle());
-    item.setDescription(itemRequest.getDescription());
-    item.setSourceUrl(itemRequest.getSourceUrl());
-    item.setTags(tagService.getOrCreateTags(itemRequest.getTags()));
+    item.setTitle(itemPutRequest.getTitle());
+    item.setDescription(itemPutRequest.getDescription());
+    item.setTags(tagService.getOrCreateTags(itemPutRequest.getTags()));
+    return ModelMapper.map(item);
   }
 
   @Transactional

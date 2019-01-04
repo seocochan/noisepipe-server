@@ -1,5 +1,7 @@
 package com.noisepipe.server.payload;
 
+import com.noisepipe.server.model.enums.Provider;
+import com.noisepipe.server.utils.AppConstants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,30 +10,22 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class ItemRequest {
+public class ItemPostRequest {
 
   @NotBlank
-  @Size(max = 40)
+  @Size(max = AppConstants.MAX_ITEM_TITLE_LENGTH)
   private String title;
-
-  @Size(max = 255)
-  private String description;
 
   @NotBlank
   private String sourceUrl;
 
-  // @NotBlank
-  // private String sourceProvider;
-
-  @Size(max = 5)
-  private List<@NotBlank @Size(max = 40) String> tags = new ArrayList<>();
+  @NotNull
+  private Provider sourceProvider;
 
   @NotNull
   private Double position;

@@ -1,5 +1,6 @@
 package com.noisepipe.server.payload;
 
+import com.noisepipe.server.model.enums.Provider;
 import lombok.*;
 
 import java.time.Instant;
@@ -16,7 +17,7 @@ public class ItemResponse {
   private String title;
   private String description;
   private String sourceUrl;
-  private String sourceProvider;
+  private Provider sourceProvider;
   @Builder.Default
   private List<String> tags = new ArrayList<>();
   private Double position;

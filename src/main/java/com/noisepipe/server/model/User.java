@@ -1,6 +1,7 @@
 package com.noisepipe.server.model;
 
 import com.noisepipe.server.model.audit.DateAudit;
+import com.noisepipe.server.utils.AppConstants;
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
@@ -35,21 +36,21 @@ public class User extends DateAudit {
   private Long id;
 
   @NotBlank
-  @Size(max = 40)
+  @Size(min = AppConstants.MIN_NAME_LENGTH, max = AppConstants.MAX_NAME_LENGTH)
   private String name;
 
   @NotBlank
-  @Size(max = 15)
+  @Size(min = AppConstants.MIN_USERNAME_LENGTH, max = AppConstants.MAX_USERNAME_LENGTH)
   private String username;
 
   @NaturalId
   @NotBlank
-  @Size(max = 40)
+  @Size(max = AppConstants.MAX_EMAIL_LENGTH)
   @Email
   private String email;
 
   @NotBlank
-  @Size(max = 100)
+  @Size(min = AppConstants.MIN_PASSWORD_LENGTH, max = AppConstants.MAX_PASSWORD_LENGTH)
   private String password;
 
   @ManyToMany(fetch = FetchType.LAZY)

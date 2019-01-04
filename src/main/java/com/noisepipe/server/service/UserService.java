@@ -4,7 +4,7 @@ import com.noisepipe.server.exception.AppException;
 import com.noisepipe.server.exception.BadRequestException;
 import com.noisepipe.server.exception.ResourceNotFoundException;
 import com.noisepipe.server.model.Role;
-import com.noisepipe.server.model.RoleName;
+import com.noisepipe.server.model.enums.RoleName;
 import com.noisepipe.server.model.User;
 import com.noisepipe.server.payload.LoginRequest;
 import com.noisepipe.server.payload.SignUpRequest;

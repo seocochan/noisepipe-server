@@ -1,7 +1,7 @@
 package com.noisepipe.server.controller;
 
 import com.noisepipe.server.payload.ApiResponse;
-import com.noisepipe.server.payload.ItemRequest;
+import com.noisepipe.server.payload.ItemPutRequest;
 import com.noisepipe.server.payload.ItemResponse;
 import com.noisepipe.server.payload.PagedResponse;
 import com.noisepipe.server.security.CurrentUser;
@@ -22,12 +22,10 @@ public class ItemController {
   private final ItemService itemService;
 
   @PutMapping("/{itemId}")
-  public ResponseEntity<ApiResponse> updateItemById(@CurrentUser UserPrincipal currentUser,
-                                                    @PathVariable Long itemId,
-                                                    @Valid @RequestBody ItemRequest itemRequest) {
-    itemService.updateItemById(currentUser.getId(), itemId, itemRequest);
-
-    return ResponseEntity.ok(new ApiResponse(true, "Successfully updated a item"));
+  public ResponseEntity<ItemResponse> updateItemById(@CurrentUser UserPrincipal currentUser,
+                                                     @PathVariable Long itemId,
+                                                     @Valid @RequestBody ItemPutRequest itemPutRequest) {
+    return ResponseEntity.ok(itemService.updateItemById(currentUser.getId(), itemId, itemPutRequest));
   }
 
   @PutMapping("/{itemId}/position")

@@ -1,6 +1,7 @@
 package com.noisepipe.server.model;
 
 import com.noisepipe.server.model.audit.DateAudit;
+import com.noisepipe.server.utils.AppConstants;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 
@@ -24,10 +25,10 @@ public class Collection extends DateAudit {
   private Long id;
 
   @NotBlank
-  @Size(max = 40)
+  @Size(max = AppConstants.MAX_COLLECTION_TITLE_LENGTH)
   private String title;
 
-  @Size(max = 255)
+  @Size(max = AppConstants.MAX_COLLECTION_DESCRIPTION_LENGTH)
   private String description;
 
   @OneToMany(
@@ -35,8 +36,8 @@ public class Collection extends DateAudit {
           cascade = CascadeType.ALL,
           orphanRemoval = true
   )
-  @BatchSize(size = 30)
-  @Size(max = 100)
+  @BatchSize(size = AppConstants.DEFAULT_BATCH_SIZE)
+  @Size(max = AppConstants.MAX_COLLECTION_ITEMS_SIZE)
   @Builder.Default
   private List<Item> items = new ArrayList<>();
 
@@ -69,8 +70,8 @@ public class Collection extends DateAudit {
           inverseJoinColumns = @JoinColumn(name = "tag_id"),
           uniqueConstraints = {@UniqueConstraint(columnNames = {"collection_id", "tag_id"})}
   )
-  @BatchSize(size = 30)
-  @Size(max = 5)
+  @BatchSize(size = AppConstants.DEFAULT_BATCH_SIZE)
+  @Size(max = AppConstants.MAX_COLLECTION_TAGS_SIZE)
   @Builder.Default
   private List<Tag> tags = new ArrayList<>();
 
