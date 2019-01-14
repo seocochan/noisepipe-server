@@ -10,6 +10,7 @@ import com.noisepipe.server.payload.CollectionSummary;
 import com.noisepipe.server.payload.PagedResponse;
 import com.noisepipe.server.repository.BookmarkRepository;
 import com.noisepipe.server.repository.CollectionRepository;
+import com.noisepipe.server.repository.UserRepository;
 import com.noisepipe.server.utils.ModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -23,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CollectionService {
 
+  private final UserRepository userRepository;
   private final CollectionRepository collectionRepository;
   private final BookmarkRepository bookmarkRepository;
   private final TagService tagService;
@@ -72,6 +74,9 @@ public class CollectionService {
   }
 
   public PagedResponse<CollectionSummary> getCollectionsByUser(String username, int page, int size) {
+    userRepository.findByUsername(username)
+            .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+
     Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
     Page<Collection> collectionPage = collectionRepository.findByUserUsername(username, pageable);
 
