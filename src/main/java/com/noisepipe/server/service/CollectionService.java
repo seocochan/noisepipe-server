@@ -71,9 +71,9 @@ public class CollectionService {
     collectionRepository.delete(collection);
   }
 
-  public PagedResponse<CollectionSummary> getCollectionsByUser(Long userId, int page, int size) {
+  public PagedResponse<CollectionSummary> getCollectionsByUser(String username, int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
-    Page<Collection> collectionPage = collectionRepository.findByUserId(userId, pageable);
+    Page<Collection> collectionPage = collectionRepository.findByUserUsername(username, pageable);
 
     if (collectionPage.getNumberOfElements() == 0) {
       return PagedResponse.of(Collections.emptyList(), collectionPage);

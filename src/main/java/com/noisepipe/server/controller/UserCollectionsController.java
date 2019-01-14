@@ -1,10 +1,7 @@
 package com.noisepipe.server.controller;
 
 import com.noisepipe.server.exception.BadRequestException;
-import com.noisepipe.server.payload.ApiResponse;
-import com.noisepipe.server.payload.CollectionRequest;
-import com.noisepipe.server.payload.CollectionSummary;
-import com.noisepipe.server.payload.PagedResponse;
+import com.noisepipe.server.payload.*;
 import com.noisepipe.server.security.CurrentUser;
 import com.noisepipe.server.security.UserPrincipal;
 import com.noisepipe.server.service.CollectionService;
@@ -16,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/users/{userId}/collections")
+@RequestMapping("/api/users/{username}/collections")
 @RequiredArgsConstructor
 public class UserCollectionsController {
 
@@ -24,9 +21,9 @@ public class UserCollectionsController {
 
   @PostMapping
   public ResponseEntity<ApiResponse> createCollection(@CurrentUser UserPrincipal currentUser,
-                                                      @PathVariable Long userId,
+                                                      @PathVariable String username,
                                                       @Valid @RequestBody CollectionRequest collectionRequest) {
-    if (!userId.equals(currentUser.getId())) {
+    if (!username.equals(currentUser.getUsername())) {
       throw new BadRequestException("Permission denied");
     }
     collectionService.createCollection(currentUser.toUser(), collectionRequest);
@@ -36,9 +33,9 @@ public class UserCollectionsController {
 
   @GetMapping
   public PagedResponse<CollectionSummary> getCollectionsByUser(
-          @PathVariable Long userId,
+          @PathVariable String username,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
-    return collectionService.getCollectionsByUser(userId, page, size);
+    return collectionService.getCollectionsByUser(username, page, size);
   }
 }

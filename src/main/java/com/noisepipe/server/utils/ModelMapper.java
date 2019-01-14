@@ -17,6 +17,8 @@ public class ModelMapper {
     return CollectionSummary.builder()
             .id(collection.getId())
             .title(collection.getTitle())
+            .items(collection.getItems().size())
+            .tags(collection.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
             .createdBy(ModelMapper.mapToSummary(collection.getUser()))
             .createdAt(collection.getCreatedAt())
             .build();
