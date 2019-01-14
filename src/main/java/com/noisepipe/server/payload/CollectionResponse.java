@@ -15,6 +15,7 @@ public class CollectionResponse {
   private Long id;
   private String title;
   private String description;
+  private int items;
   @Builder.Default
   private List<String> tags = new ArrayList<>();
   private int bookmarks;

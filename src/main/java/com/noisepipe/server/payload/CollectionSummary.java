@@ -12,8 +12,6 @@ import java.time.Instant;
 public class CollectionSummary {
   private Long id;
   private String title;
-  private String description;
-  private int items;
   private UserSummary createdBy;
   private Instant createdAt;
 }

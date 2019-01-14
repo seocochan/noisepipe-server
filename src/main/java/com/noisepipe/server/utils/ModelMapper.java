@@ -17,8 +17,6 @@ public class ModelMapper {
     return CollectionSummary.builder()
             .id(collection.getId())
             .title(collection.getTitle())
-            .description(collection.getDescription())
-            .items(collection.getItems().size())
             .createdBy(ModelMapper.mapToSummary(collection.getUser()))
             .createdAt(collection.getCreatedAt())
             .build();
@@ -30,6 +28,7 @@ public class ModelMapper {
             .id(collection.getId())
             .title(collection.getTitle())
             .description(collection.getDescription())
+            .items(collection.getItems().size())
             .tags(collection.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
             .bookmarks(collection.getBookmarks().size())
             .isBookmarked(isBookmarked)
