@@ -30,7 +30,7 @@ public class CollectionService {
   private final TagService tagService;
 
   @Transactional
-  public void createCollection(User user, CollectionRequest collectionRequest) {
+  public CollectionResponse createCollection(User user, CollectionRequest collectionRequest) {
     Collection collection = Collection.builder()
             .user(user)
             .title(collectionRequest.getTitle())
@@ -38,7 +38,7 @@ public class CollectionService {
             .tags(tagService.getOrCreateTags(collectionRequest.getTags()))
             .build();
 
-    collectionRepository.save(collection);
+    return ModelMapper.map(collectionRepository.save(collection), false);
   }
 
   public CollectionResponse getCollectionById(Long userId, Long collectionId) {
@@ -51,7 +51,7 @@ public class CollectionService {
   }
 
   @Transactional
-  public void updateCollectionById(Long userId, Long collectionId, CollectionRequest collectionRequest) {
+  public CollectionResponse updateCollectionById(Long userId, Long collectionId, CollectionRequest collectionRequest) {
     Collection collection = collectionRepository.findById(collectionId)
             .orElseThrow(() -> new ResourceNotFoundException("Collection", "id", collectionId));
     if (!userId.equals(collection.getUser().getId())) {
@@ -61,6 +61,10 @@ public class CollectionService {
     collection.setTitle(collectionRequest.getTitle());
     collection.setDescription(collectionRequest.getDescription());
     collection.setTags(tagService.getOrCreateTags(collectionRequest.getTags()));
+    Boolean isBookmarked = userId == null ? false
+            : bookmarkRepository.existsByUserIdAndCollectionId(userId, collectionId);
+
+    return ModelMapper.map(collection, isBookmarked);
   }
 
   public void removeCollectionById(Long userId, Long collectionId) {

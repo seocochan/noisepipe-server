@@ -20,15 +20,13 @@ public class UserCollectionsController {
   private final CollectionService collectionService;
 
   @PostMapping
-  public ResponseEntity<ApiResponse> createCollection(@CurrentUser UserPrincipal currentUser,
-                                                      @PathVariable String username,
-                                                      @Valid @RequestBody CollectionRequest collectionRequest) {
+  public ResponseEntity<CollectionResponse> createCollection(@CurrentUser UserPrincipal currentUser,
+                                                             @PathVariable String username,
+                                                             @Valid @RequestBody CollectionRequest collectionRequest) {
     if (!username.equals(currentUser.getUsername())) {
       throw new BadRequestException("Permission denied");
     }
-    collectionService.createCollection(currentUser.toUser(), collectionRequest);
-
-    return ResponseEntity.ok(new ApiResponse(true, "Successfully created a collection"));
+    return ResponseEntity.ok(collectionService.createCollection(currentUser.toUser(), collectionRequest));
   }
 
   @GetMapping

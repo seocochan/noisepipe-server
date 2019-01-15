@@ -31,7 +31,9 @@ public class ModelMapper {
             .title(collection.getTitle())
             .description(collection.getDescription())
             .items(collection.getItems().size())
-            .tags(collection.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
+            .tags(collection.getTags() == null
+                    ? Collections.emptyList()
+                    : collection.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
             .bookmarks(collection.getBookmarks().size())
             .isBookmarked(isBookmarked)
             .createdBy(ModelMapper.mapToSummary(collection.getUser()))

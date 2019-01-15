@@ -28,12 +28,10 @@ public class CollectionController {
   }
 
   @PutMapping("/{collectionId}")
-  public ResponseEntity<ApiResponse> updateCollectionById(@CurrentUser UserPrincipal currentUser,
-                                                          @PathVariable Long collectionId,
-                                                          @Valid @RequestBody CollectionRequest collectionRequest) {
-    collectionService.updateCollectionById(currentUser.getId(), collectionId, collectionRequest);
-
-    return ResponseEntity.ok(new ApiResponse(true, "Successfully updated a collection"));
+  public ResponseEntity<CollectionResponse> updateCollectionById(@CurrentUser UserPrincipal currentUser,
+                                                                 @PathVariable Long collectionId,
+                                                                 @Valid @RequestBody CollectionRequest collectionRequest) {
+    return ResponseEntity.ok(collectionService.updateCollectionById(currentUser.getId(), collectionId, collectionRequest));
   }
 
   @DeleteMapping("/{collectionId}")
