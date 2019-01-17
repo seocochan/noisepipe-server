@@ -1,6 +1,5 @@
 package com.noisepipe.server.service;
 
-import com.noisepipe.server.exception.BadRequestException;
 import com.noisepipe.server.exception.ResourceNotFoundException;
 import com.noisepipe.server.model.Bookmark;
 import com.noisepipe.server.model.Collection;
@@ -14,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -27,9 +27,13 @@ public class BookmarkService {
   private final BookmarkRepository bookmarkRepository;
 
   public void createBookmark(User user, Long collectionId) {
+    // return 200 even bookmark already exists
+    if (bookmarkRepository.existsByUserIdAndCollectionId(user.getId(), collectionId)) {
+      return;
+    }
+
     Collection collection = collectionRepository.findById(collectionId)
             .orElseThrow(() -> new ResourceNotFoundException("Collection", "id", collectionId));
-
     Bookmark bookmark = new Bookmark();
     bookmark.setUser(user);
     bookmark.setCollection(collection);
@@ -39,22 +43,16 @@ public class BookmarkService {
   public void removeBookmark(Long userId, Long collectionId) {
     Bookmark bookmark = bookmarkRepository.findByUserIdAndCollectionId(userId, collectionId)
             .orElseThrow(() -> new ResourceNotFoundException("Bookmark", "collection_id", collectionId));
-    if (!userId.equals(bookmark.getUser().getId())) { // FIXME: needless check?
-      throw new BadRequestException("Permission denied");
-    }
-
     bookmarkRepository.delete(bookmark);
   }
 
-  public PagedResponse<CollectionSummary> getCollectionsBookmarkedByUser(Long userId, int page, int size) {
-    List<Long> collectionIds = bookmarkRepository.findAllCollectionIds(userId);
-    if (collectionIds.size() == 0) {
-      return new PagedResponse<>(Collections.emptyList(), page, size, 0l, 0, true);
+  public PagedResponse<CollectionSummary> getCollectionsBookmarkedByUser(String username, int page, int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "bookmarks.createdAt");
+    Page<Collection> collectionPage = collectionRepository.findByBookmarksUserUsername(username, pageable);
+
+    if (collectionPage.getNumberOfElements() == 0) {
+      return PagedResponse.of(Collections.emptyList(), collectionPage);
     }
-
-    Pageable pageable = PageRequest.of(page, size);
-    Page<Collection> collectionPage = collectionRepository.findByIdInOrderByField(collectionIds, pageable);
-
     List<CollectionSummary> collectionSummaries = collectionPage.map(ModelMapper::mapToSummary).getContent();
     return PagedResponse.of(collectionSummaries, collectionPage);
   }

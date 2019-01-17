@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users/{userId}/bookmarks")
+@RequestMapping("/api/users/{username}/bookmarks")
 @RequiredArgsConstructor
 public class UserBookmarksController {
 
@@ -16,9 +16,9 @@ public class UserBookmarksController {
 
   @GetMapping
   public PagedResponse<CollectionSummary> getCollectionsBookmarkedByUser(
-          @PathVariable Long userId,
+          @PathVariable String username,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
-    return bookmarkService.getCollectionsBookmarkedByUser(userId, page, size);
+    return bookmarkService.getCollectionsBookmarkedByUser(username, page, size);
   }
 }

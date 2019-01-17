@@ -21,4 +21,6 @@ public interface CollectionRepository extends JpaRepository<Collection, Long> {
           countQuery = "SELECT COUNT(*) FROM collections WHERE id IN ?1",
           nativeQuery = true)
   Page<Collection> findByIdInOrderByField(List<Long> id, Pageable pageable);
+
+  Page<Collection> findByBookmarksUserUsername(String username, Pageable pageable);
 }
