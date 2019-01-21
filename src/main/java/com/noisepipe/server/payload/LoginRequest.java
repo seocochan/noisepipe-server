@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 public class LoginRequest {
 
   @NotBlank
-  private String usernameOrEmail;
+  private String username;
 
   @NotBlank
   @Size(min = AppConstants.MIN_PASSWORD_LENGTH, max = AppConstants.MAX_PASSWORD_LENGTH)

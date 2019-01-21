@@ -10,7 +10,7 @@ public class ModelMapper {
 
   // mapToSummary()
   public static UserSummary mapToSummary(User user) {
-    return new UserSummary(user.getId(), user.getUsername(), user.getName());
+    return new UserSummary(user.getId(), user.getUsername());
   }
 
   public static CollectionSummary mapToSummary(Collection collection) {

@@ -29,13 +29,6 @@ public class UserController {
     return new UserIdentityAvailability(isAvailable);
   }
 
-  @GetMapping("/checkEmailAvailability")
-  public UserIdentityAvailability checkEmailAvailability(@RequestParam String email) {
-    Boolean isAvailable = !userService.checkEmail(email);
-
-    return new UserIdentityAvailability(isAvailable);
-  }
-
   @GetMapping("/{username}")
   public UserProfile getUserProfile(@PathVariable String username) {
     return userService.getUserProfile(username);

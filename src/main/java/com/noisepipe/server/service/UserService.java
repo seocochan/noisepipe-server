@@ -37,13 +37,9 @@ public class UserService {
     return userRepository.existsByUsername(username);
   }
 
-  public Boolean checkEmail(String email) {
-    return userRepository.existsByEmail(email);
-  }
-
   public String authenticateUser(LoginRequest loginRequest) {
     Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginRequest.getUsernameOrEmail(), loginRequest.getPassword()));
+            new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     return tokenProvider.generateToken(authentication);
@@ -53,9 +49,7 @@ public class UserService {
     Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
             .orElseThrow(() -> new AppException("User Role not set."));
     User user = User.builder()
-            .name(signUpRequest.getName())
             .username(signUpRequest.getUsername())
-            .email(signUpRequest.getEmail())
             .password(passwordEncoder.encode(signUpRequest.getPassword()))
             .roles(Collections.singleton(userRole))
             .build();
@@ -74,6 +68,6 @@ public class UserService {
     User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
 
-    return new UserProfile(user.getId(), user.getUsername(), user.getName(), user.getCreatedAt());
+    return new UserProfile(user.getId(), user.getUsername(), user.getCreatedAt());
   }
 }

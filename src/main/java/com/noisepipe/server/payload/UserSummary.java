@@ -12,5 +12,4 @@ import lombok.Setter;
 public class UserSummary {
   private Long id;
   private String username;
-  private String name;
 }
