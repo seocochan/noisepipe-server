@@ -12,6 +12,5 @@ import java.time.Instant;
 public class UserProfile {
   private Long id;
   private String username;
-  private String name;
   private Instant joinedAt;
 }

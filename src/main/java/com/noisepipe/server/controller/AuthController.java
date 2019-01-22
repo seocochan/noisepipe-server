@@ -38,12 +38,6 @@ public class AuthController {
               new ApiResponse(false, "이미 사용중인 이름입니다."), HttpStatus.BAD_REQUEST
       );
     }
-    if (userService.checkEmail(signUpRequest.getEmail())) {
-      return new ResponseEntity<>(
-              new ApiResponse(false, "이미 사용중인 이메일입니다."), HttpStatus.BAD_REQUEST
-      );
-    }
-
     User user = userService.registerUser(signUpRequest);
 
     // 요청 처리 후 브라우저가 액세스할 url 생성 & location header로 return

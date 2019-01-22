@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface CollectionRepository extends JpaRepository<Collection, Long> {
-  Page<Collection> findByUserId(Long userId, Pageable pageable);
+  Page<Collection> findByUserUsername(String username, Pageable pageable);
 
   @Query("SELECT c FROM Collection c JOIN c.tags t WHERE t.name = :tagName")
   Page<Collection> findByTagName(@Param("tagName") String tagName, Pageable pageable);
@@ -21,4 +21,6 @@ public interface CollectionRepository extends JpaRepository<Collection, Long> {
           countQuery = "SELECT COUNT(*) FROM collections WHERE id IN ?1",
           nativeQuery = true)
   Page<Collection> findByIdInOrderByField(List<Long> id, Pageable pageable);
+
+  Page<Collection> findByBookmarksUserUsername(String username, Pageable pageable);
 }

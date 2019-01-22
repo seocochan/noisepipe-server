@@ -3,10 +3,8 @@ package com.noisepipe.server.model;
 import com.noisepipe.server.model.audit.DateAudit;
 import com.noisepipe.server.utils.AppConstants;
 import lombok.*;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -18,9 +16,6 @@ import java.util.Set;
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "username"
-        }),
-        @UniqueConstraint(columnNames = {
-                "email"
         })
 })
 @Builder
@@ -36,18 +31,8 @@ public class User extends DateAudit {
   private Long id;
 
   @NotBlank
-  @Size(min = AppConstants.MIN_NAME_LENGTH, max = AppConstants.MAX_NAME_LENGTH)
-  private String name;
-
-  @NotBlank
   @Size(min = AppConstants.MIN_USERNAME_LENGTH, max = AppConstants.MAX_USERNAME_LENGTH)
   private String username;
-
-  @NaturalId
-  @NotBlank
-  @Size(max = AppConstants.MAX_EMAIL_LENGTH)
-  @Email
-  private String email;
 
   @NotBlank
   @Size(min = AppConstants.MIN_PASSWORD_LENGTH, max = AppConstants.MAX_PASSWORD_LENGTH)

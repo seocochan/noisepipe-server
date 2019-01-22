@@ -10,15 +10,15 @@ public class ModelMapper {
 
   // mapToSummary()
   public static UserSummary mapToSummary(User user) {
-    return new UserSummary(user.getId(), user.getUsername(), user.getName());
+    return new UserSummary(user.getId(), user.getUsername());
   }
 
   public static CollectionSummary mapToSummary(Collection collection) {
     return CollectionSummary.builder()
             .id(collection.getId())
             .title(collection.getTitle())
-            .description(collection.getDescription())
             .items(collection.getItems().size())
+            .tags(collection.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
             .createdBy(ModelMapper.mapToSummary(collection.getUser()))
             .createdAt(collection.getCreatedAt())
             .build();
@@ -30,7 +30,10 @@ public class ModelMapper {
             .id(collection.getId())
             .title(collection.getTitle())
             .description(collection.getDescription())
-            .tags(collection.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
+            .items(collection.getItems().size())
+            .tags(collection.getTags() == null
+                    ? Collections.emptyList()
+                    : collection.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
             .bookmarks(collection.getBookmarks().size())
             .isBookmarked(isBookmarked)
             .createdBy(ModelMapper.mapToSummary(collection.getUser()))
