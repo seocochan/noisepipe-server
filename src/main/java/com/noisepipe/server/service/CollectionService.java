@@ -12,6 +12,7 @@ import com.noisepipe.server.repository.BookmarkRepository;
 import com.noisepipe.server.repository.CollectionRepository;
 import com.noisepipe.server.repository.UserRepository;
 import com.noisepipe.server.utils.ModelMapper;
+import com.noisepipe.server.utils.OffsetBasedPageRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -77,11 +78,13 @@ public class CollectionService {
     collectionRepository.delete(collection);
   }
 
-  public PagedResponse<CollectionSummary> getCollectionsByUser(String username, int page, int size) {
-    userRepository.findByUsername(username)
+  public PagedResponse<CollectionSummary> getCollectionsByUser(String username, Long offsetId, int size) {
+    User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+    long offset = offsetId == null ? 0 : collectionRepository.getRownumById(user.getId(), offsetId)
+            .orElseThrow(() -> new ResourceNotFoundException("Collection", "id", offsetId)).longValue();
 
-    Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+    Pageable pageable = new OffsetBasedPageRequest(offset, size, Sort.Direction.DESC, "createdAt");
     Page<Collection> collectionPage = collectionRepository.findByUserUsername(username, pageable);
 
     if (collectionPage.getNumberOfElements() == 0) {

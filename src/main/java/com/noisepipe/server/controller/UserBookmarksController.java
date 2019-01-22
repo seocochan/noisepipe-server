@@ -17,8 +17,8 @@ public class UserBookmarksController {
   @GetMapping
   public PagedResponse<CollectionSummary> getCollectionsBookmarkedByUser(
           @PathVariable String username,
-          @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+          @RequestParam(required = false) Long offsetId,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
-    return bookmarkService.getCollectionsBookmarkedByUser(username, page, size);
+    return bookmarkService.getCollectionsBookmarkedByUser(username, offsetId, size);
   }
 }

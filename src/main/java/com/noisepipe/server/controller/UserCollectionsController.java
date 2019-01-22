@@ -32,8 +32,8 @@ public class UserCollectionsController {
   @GetMapping
   public PagedResponse<CollectionSummary> getCollectionsByUser(
           @PathVariable String username,
-          @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+          @RequestParam(required = false) Long offsetId,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
-    return collectionService.getCollectionsByUser(username, page, size);
+    return collectionService.getCollectionsByUser(username, offsetId, size);
   }
 }
