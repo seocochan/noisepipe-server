@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -13,6 +14,7 @@ public class SignUpRequest {
 
   @NotBlank
   @Size(min = AppConstants.MIN_USERNAME_LENGTH, max = AppConstants.MAX_USERNAME_LENGTH)
+  @Pattern(regexp = "^\\w+$")
   private String username;
 
   @NotBlank
