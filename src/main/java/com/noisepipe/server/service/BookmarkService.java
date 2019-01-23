@@ -43,8 +43,9 @@ public class BookmarkService {
   }
 
   public void removeBookmark(Long userId, Long collectionId) {
-    Bookmark bookmark = bookmarkRepository.findByUserIdAndCollectionId(userId, collectionId)
-            .orElseThrow(() -> new ResourceNotFoundException("Bookmark", "collection_id", collectionId));
+    Bookmark bookmark = bookmarkRepository.findByUserIdAndCollectionId(userId, collectionId).orElse(null);
+    // return 200 even bookmark not exists
+    if (bookmark == null) return;
     bookmarkRepository.delete(bookmark);
   }
 
