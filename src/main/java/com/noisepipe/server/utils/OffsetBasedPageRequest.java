@@ -44,7 +44,7 @@ public class OffsetBasedPageRequest implements Pageable, Serializable {
 
   @Override
   public int getPageNumber() {
-    return (int) (offset / size);
+    return (int) Math.ceil((float) offset / size);
   }
 
   @Override
