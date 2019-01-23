@@ -90,8 +90,8 @@ public class CollectionService {
     if (collectionPage.getNumberOfElements() == 0) {
       return PagedResponse.of(Collections.emptyList(), collectionPage);
     }
-    List<CollectionSummary> collectionResponses = collectionPage.map(ModelMapper::mapToSummary).getContent();
-    return PagedResponse.of(collectionResponses, collectionPage);
+    List<CollectionSummary> collectionSummaries = collectionPage.map(ModelMapper::mapToSummary).getContent();
+    return PagedResponse.of(collectionSummaries, collectionPage);
   }
 
   public PagedResponse<CollectionSummary> getCollectionsByTagName(String tagName, int page, int size) {
@@ -101,7 +101,7 @@ public class CollectionService {
     if (collectionPage.getNumberOfElements() == 0) {
       return PagedResponse.of(Collections.emptyList(), collectionPage);
     }
-    List<CollectionSummary> collectionResponses = collectionPage.map(ModelMapper::mapToSummary).getContent();
-    return PagedResponse.of(collectionResponses, collectionPage);
+    List<CollectionSummary> collectionSummaries = collectionPage.map(ModelMapper::mapToSummary).getContent();
+    return PagedResponse.of(collectionSummaries, collectionPage);
   }
 }
