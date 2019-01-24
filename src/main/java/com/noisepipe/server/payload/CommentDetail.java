@@ -9,11 +9,10 @@ import java.time.Instant;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CommentResponse {
+public class CommentDetail {
   private Long id;
   private String text;
-  private Integer depth;
-  private Long replies;
+  private CollectionSummary collection;
   private UserSummary createdBy;
   private Instant createdAt;
 }

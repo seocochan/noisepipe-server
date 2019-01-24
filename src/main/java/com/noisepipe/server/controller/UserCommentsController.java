@@ -1,6 +1,6 @@
 package com.noisepipe.server.controller;
 
-import com.noisepipe.server.payload.CommentResponse;
+import com.noisepipe.server.payload.CommentDetail;
 import com.noisepipe.server.payload.PagedResponse;
 import com.noisepipe.server.service.CommentService;
 import com.noisepipe.server.utils.AppConstants;
@@ -15,7 +15,7 @@ public class UserCommentsController {
   private final CommentService commentService;
 
   @GetMapping
-  public PagedResponse<CommentResponse> getCommentsByUser(
+  public PagedResponse<CommentDetail> getCommentsByUser(
           @PathVariable Long userId,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {

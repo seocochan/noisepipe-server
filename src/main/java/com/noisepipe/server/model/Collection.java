@@ -50,6 +50,8 @@ public class Collection extends DateAudit {
           cascade = CascadeType.ALL,
           orphanRemoval = true
   )
+  @BatchSize(size = AppConstants.DEFAULT_BATCH_SIZE)
+  @Size(max = AppConstants.MAX_COLLECTION_TAGS_SIZE)
   @Builder.Default
   private List<Comment> comments = new ArrayList<>();
 
