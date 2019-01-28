@@ -5,8 +5,7 @@ import com.noisepipe.server.utils.AppConstants;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "comments")
@@ -26,10 +25,11 @@ public class Comment extends DateAudit {
   @Size(max = AppConstants.MAX_COMMENT_TEXT_LENGTH)
   private String text;
 
-  // 대댓글 작성시 부모 Comment.id
   private Long replyTo;
 
-  // 대댓글 깊이 (default = 0, 0 ~ 2)
+  @NotNull
+  @Min(0)
+  @Max(1)
   private Integer depth;
 
   @ManyToOne(optional = false)

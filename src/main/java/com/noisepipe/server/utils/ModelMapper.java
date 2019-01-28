@@ -31,6 +31,7 @@ public class ModelMapper {
             .title(collection.getTitle())
             .description(collection.getDescription())
             .items(collection.getItems().size())
+            .comments(collection.getComments().size())
             .tags(collection.getTags() == null
                     ? Collections.emptyList()
                     : collection.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
@@ -41,9 +42,26 @@ public class ModelMapper {
             .build();
   }
 
-  public static CommentResponse map(Comment comment) {
-    return new CommentResponse(comment.getId(), comment.getText(), comment.getDepth(),
-            ModelMapper.mapToSummary(comment.getCollection()), ModelMapper.mapToSummary(comment.getUser()));
+  public static CommentResponse map(Comment comment, Long replies) {
+    return CommentResponse.builder()
+            .id(comment.getId())
+            .text(comment.getText())
+            .depth(comment.getDepth())
+            .replies(replies)
+            .createdBy(ModelMapper.mapToSummary(comment.getUser()))
+            .createdAt(comment.getCreatedAt())
+            .build();
+  }
+
+  public static CommentSummary map(Comment comment) {
+    return CommentSummary.builder()
+            .id(comment.getId())
+            .text(comment.getText())
+            .collectionId(comment.getCollection().getId())
+            .collectionTitle(comment.getCollection().getTitle())
+            .createdBy(ModelMapper.mapToSummary(comment.getUser()))
+            .createdAt(comment.getCreatedAt())
+            .build();
   }
 
   public static ItemResponse map(Item item) {
