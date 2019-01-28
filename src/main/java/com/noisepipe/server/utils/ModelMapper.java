@@ -53,11 +53,12 @@ public class ModelMapper {
             .build();
   }
 
-  public static CommentDetail map(Comment comment) {
-    return CommentDetail.builder()
+  public static CommentSummary map(Comment comment) {
+    return CommentSummary.builder()
             .id(comment.getId())
             .text(comment.getText())
-            .collection(ModelMapper.mapToSummary(comment.getCollection()))
+            .collectionId(comment.getCollection().getId())
+            .collectionTitle(comment.getCollection().getTitle())
             .createdBy(ModelMapper.mapToSummary(comment.getUser()))
             .createdAt(comment.getCreatedAt())
             .build();

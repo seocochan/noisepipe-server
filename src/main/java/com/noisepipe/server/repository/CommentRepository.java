@@ -11,10 +11,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-  Page<Comment> findByUserId(Long userId, Pageable pageable);
+  Page<Comment> findByUserUsername(String username, Pageable pageable);
 
   List<Comment> findByCollectionIdAndDepthAndReplyTo(Long collectionId, Integer depth, Long replyTo, Sort sort);
 
@@ -25,4 +26,19 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
   List<ReplyCount> findReplyCount(@Param("collectionId") Long collectionId, @Param("depth") Integer depth);
 
   void deleteAllByReplyTo(Long replyTo);
+
+  /**
+   * Reference:
+   * https://stackoverflow.com/a/38104386/10114911
+   */
+  @Query(value = "SELECT rownum " +
+          "FROM ( " +
+          "  SELECT id, @rownum \\:= @rownum + 1 AS rownum " +
+          "  FROM comments c, (SELECT @rownum \\:= 0) r " +
+          "  WHERE user_id = :userId " +
+          "  ORDER BY created_at DESC" +
+          ") rows " +
+          "WHERE rows.id = :offsetId",
+          nativeQuery = true)
+  Optional<Double> getRownumById(@Param("userId") Long userId, @Param("offsetId") Long offsetId);
 }

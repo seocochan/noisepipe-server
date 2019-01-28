@@ -8,10 +8,11 @@ import com.noisepipe.server.model.User;
 import com.noisepipe.server.payload.*;
 import com.noisepipe.server.repository.CollectionRepository;
 import com.noisepipe.server.repository.CommentRepository;
+import com.noisepipe.server.repository.UserRepository;
 import com.noisepipe.server.utils.ModelMapper;
+import com.noisepipe.server.utils.OffsetBasedPageRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CommentService {
 
+  private final UserRepository userRepository;
   private final CollectionRepository collectionRepository;
   private final CommentRepository commentRepository;
 
@@ -78,15 +80,20 @@ public class CommentService {
     commentRepository.delete(comment);
   }
 
-  public PagedResponse<CommentDetail> getCommentsByUser(Long userId, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
-    Page<Comment> commentPage = commentRepository.findByUserId(userId, pageable);
+  public PagedResponse<CommentSummary> getCommentsByUser(String username, Long offsetId, int size) {
+    User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+    long offset = offsetId == null ? 0 : commentRepository.getRownumById(user.getId(), offsetId)
+            .orElseThrow(() -> new ResourceNotFoundException("Comment", "id", offsetId)).longValue();
+
+    Pageable pageable = new OffsetBasedPageRequest(offset, size, Sort.Direction.DESC, "createdAt");
+    Page<Comment> commentPage = commentRepository.findByUserUsername(username, pageable);
 
     if (commentPage.getNumberOfElements() == 0) {
       return PagedResponse.of(Collections.emptyList(), commentPage);
     }
-    List<CommentDetail> commentDetails = commentPage.map(ModelMapper::map).getContent();
-    return PagedResponse.of(commentDetails, commentPage);
+    List<CommentSummary> commentSummaries = commentPage.map(ModelMapper::map).getContent();
+    return PagedResponse.of(commentSummaries, commentPage);
   }
 
   public List<CommentResponse> getCommentsByCollection(Long collectionId, Long replyTo) {
