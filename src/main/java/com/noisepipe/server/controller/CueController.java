@@ -2,6 +2,7 @@ package com.noisepipe.server.controller;
 
 import com.noisepipe.server.payload.ApiResponse;
 import com.noisepipe.server.payload.CueRequest;
+import com.noisepipe.server.payload.CueResponse;
 import com.noisepipe.server.security.CurrentUser;
 import com.noisepipe.server.security.UserPrincipal;
 import com.noisepipe.server.service.CueService;
@@ -19,12 +20,10 @@ public class CueController {
   private final CueService cueService;
 
   @PutMapping("/{cueId}")
-  public ResponseEntity<ApiResponse> updateCueById(@CurrentUser UserPrincipal currentUser,
+  public ResponseEntity<CueResponse> updateCueById(@CurrentUser UserPrincipal currentUser,
                                                    @PathVariable Long cueId,
                                                    @Valid @RequestBody CueRequest cueRequest) {
-    cueService.updateCueById(currentUser.getId(), cueId, cueRequest);
-
-    return ResponseEntity.ok(new ApiResponse(true, "Successfully updated a cue"));
+    return ResponseEntity.ok(cueService.updateCueById(currentUser.getId(), cueId, cueRequest));
   }
 
   @DeleteMapping("/{cueId}")

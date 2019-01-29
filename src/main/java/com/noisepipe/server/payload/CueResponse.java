@@ -12,6 +12,6 @@ import java.time.Instant;
 public class CueResponse {
   private Long id;
   private Integer seconds;
-  private String name;
+  private String text;
   private Instant createdAt;
 }

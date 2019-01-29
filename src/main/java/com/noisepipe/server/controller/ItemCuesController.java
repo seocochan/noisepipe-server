@@ -1,7 +1,5 @@
 package com.noisepipe.server.controller;
 
-import com.noisepipe.server.model.Cue;
-import com.noisepipe.server.payload.ApiResponse;
 import com.noisepipe.server.payload.CueRequest;
 import com.noisepipe.server.payload.CueResponse;
 import com.noisepipe.server.security.CurrentUser;
@@ -22,12 +20,10 @@ public class ItemCuesController {
   private final CueService cueService;
 
   @PostMapping
-  public ResponseEntity<ApiResponse> createCue(@CurrentUser UserPrincipal currentUser,
+  public ResponseEntity<CueResponse> createCue(@CurrentUser UserPrincipal currentUser,
                                                @PathVariable Long itemId,
                                                @Valid @RequestBody CueRequest cueRequest) {
-    cueService.createCue(currentUser.getId(), itemId, cueRequest);
-
-    return ResponseEntity.ok(new ApiResponse(true, "Successfully created a cue"));
+    return ResponseEntity.ok(cueService.createCue(currentUser.getId(), itemId, cueRequest));
   }
 
   @GetMapping

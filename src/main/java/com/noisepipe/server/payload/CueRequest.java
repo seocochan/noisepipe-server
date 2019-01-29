@@ -17,6 +17,6 @@ public class CueRequest {
   @NotNull
   private Integer seconds;
 
-  @Size(max = AppConstants.MAX_CUE_NAME_LENGTH)
-  private String name;
+  @Size(max = AppConstants.MAX_CUE_TEXT_LENGTH)
+  private String text;
 }

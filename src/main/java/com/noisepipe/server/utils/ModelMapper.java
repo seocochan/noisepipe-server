@@ -86,7 +86,7 @@ public class ModelMapper {
     return CueResponse.builder()
             .id(cue.getId())
             .seconds(cue.getSeconds())
-            .name(cue.getName())
+            .text(cue.getText())
             .createdAt(cue.getCreatedAt())
             .build();
   }
