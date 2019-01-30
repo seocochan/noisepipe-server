@@ -25,7 +25,7 @@ public class CueService {
   private final CueRepository cueRepository;
 
   @Transactional
-  public void createCue(Long userId, Long itemId, CueRequest cueRequest) {
+  public CueResponse createCue(Long userId, Long itemId, CueRequest cueRequest) {
     Item item = itemRepository.findById(itemId)
             .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
     if (!userId.equals(item.getCreatedBy())) {
@@ -37,13 +37,14 @@ public class CueService {
 
     Cue cue = Cue.builder()
             .seconds(cueRequest.getSeconds())
-            .name(cueRequest.getName())
+            .text(cueRequest.getText())
             .build();
     item.addCue(cue);
+    return ModelMapper.map(cueRepository.save(cue));
   }
 
   @Transactional
-  public void updateCueById(Long userId, Long cueId, CueRequest cueRequest) {
+  public CueResponse updateCueById(Long userId, Long cueId, CueRequest cueRequest) {
     Cue cue = cueRepository.findById(cueId)
             .orElseThrow(() -> new ResourceNotFoundException("Cue", "id", cueId));
     if (!userId.equals(cue.getCreatedBy())) {
@@ -51,7 +52,8 @@ public class CueService {
     }
 
     cue.setSeconds(cueRequest.getSeconds());
-    cue.setName(cueRequest.getName());
+    cue.setText(cueRequest.getText());
+    return ModelMapper.map(cue);
   }
 
   public void removeCueById(Long userId, Long cueId) {

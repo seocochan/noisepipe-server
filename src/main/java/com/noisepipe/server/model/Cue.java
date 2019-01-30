@@ -9,17 +9,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "cues", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {
-                "item_id", "seconds"
-        })
-})
+@Table(name = "cues")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class Cue extends UserDateAudit {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -27,6 +24,6 @@ public class Cue extends UserDateAudit {
   @NotNull
   private Integer seconds;
 
-  @Size(max = AppConstants.MAX_CUE_NAME_LENGTH)
-  private String name;
+  @Size(max = AppConstants.MAX_CUE_TEXT_LENGTH)
+  private String text;
 }

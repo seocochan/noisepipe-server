@@ -70,7 +70,8 @@ public class Item extends UserDateAudit {
           orphanRemoval = true
   )
   @JoinColumn(name = "item_id")
-  @OrderBy("seconds")
+  @BatchSize(size = AppConstants.DEFAULT_BATCH_SIZE)
+  @OrderBy("seconds, id")
   @Builder.Default
   private List<Cue> cues = new ArrayList<>();
 
