@@ -103,7 +103,7 @@ public class ItemService {
   public PagedResponse<ItemSummary> searchItems(String q, int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
     Page<Item> itemPage
-            = itemRepository.findByTitleContainingIgnoreCaseOrTagsNameContainingIgnoreCase(q, q, pageable);
+            = itemRepository.findDistinctByTitleContainingIgnoreCaseOrTagsNameContainingIgnoreCase(q, q, pageable);
 
     if (itemPage.getNumberOfElements() == 0) {
       return PagedResponse.of(Collections.emptyList(), itemPage);

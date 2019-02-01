@@ -108,7 +108,7 @@ public class CollectionService {
   public PagedResponse<CollectionSummary> searchCollections(String q, int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
     Page<Collection> collectionPage
-            = collectionRepository.findByTitleContainingIgnoreCaseOrTagsNameContainingIgnoreCase(q, q, pageable);
+            = collectionRepository.findDistinctByTitleContainingIgnoreCaseOrTagsNameContainingIgnoreCase(q, q, pageable);
 
     if (collectionPage.getNumberOfElements() == 0) {
       return PagedResponse.of(Collections.emptyList(), collectionPage);

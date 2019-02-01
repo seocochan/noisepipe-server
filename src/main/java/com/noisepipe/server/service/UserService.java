@@ -81,7 +81,7 @@ public class UserService {
   public PagedResponse<UserProfile> searchUsers(String q, int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
     Page<User> userPage
-            = userRepository.findByUsernameContainingIgnoreCase(q, pageable);
+            = userRepository.findDistinctByUsernameContainingIgnoreCase(q, pageable);
 
     if (userPage.getNumberOfElements() == 0) {
       return PagedResponse.of(Collections.emptyList(), userPage);
