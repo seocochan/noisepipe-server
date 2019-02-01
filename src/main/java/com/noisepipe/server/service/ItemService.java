@@ -4,10 +4,7 @@ import com.noisepipe.server.exception.BadRequestException;
 import com.noisepipe.server.exception.ResourceNotFoundException;
 import com.noisepipe.server.model.Collection;
 import com.noisepipe.server.model.Item;
-import com.noisepipe.server.payload.ItemPostRequest;
-import com.noisepipe.server.payload.ItemPutRequest;
-import com.noisepipe.server.payload.ItemResponse;
-import com.noisepipe.server.payload.PagedResponse;
+import com.noisepipe.server.payload.*;
 import com.noisepipe.server.repository.CollectionRepository;
 import com.noisepipe.server.repository.ItemRepository;
 import com.noisepipe.server.utils.ModelMapper;
@@ -92,14 +89,26 @@ public class ItemService {
     return PagedResponse.of(itemResponses, itemPage);
   }
 
-  public PagedResponse<ItemResponse> getItemsByTagName(String tagName, int page, int size) {
+  public PagedResponse<ItemSummary> getItemsByTagName(String tagName, int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
     Page<Item> itemPage = itemRepository.findByTagName(tagName, pageable);
 
     if (itemPage.getNumberOfElements() == 0) {
       return PagedResponse.of(Collections.emptyList(), itemPage);
     }
-    List<ItemResponse> itemResponses = itemPage.map(ModelMapper::map).getContent();
+    List<ItemSummary> itemResponses = itemPage.map(ModelMapper::mapToSummary).getContent();
     return PagedResponse.of(itemResponses, itemPage);
+  }
+
+  public PagedResponse<ItemSummary> searchItems(String q, int page, int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+    Page<Item> itemPage
+            = itemRepository.findByTitleContainingIgnoreCaseOrTagsNameContainingIgnoreCase(q, q, pageable);
+
+    if (itemPage.getNumberOfElements() == 0) {
+      return PagedResponse.of(Collections.emptyList(), itemPage);
+    }
+    List<ItemSummary> itemSummaries = itemPage.map(ModelMapper::mapToSummary).getContent();
+    return PagedResponse.of(itemSummaries, itemPage);
   }
 }

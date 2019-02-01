@@ -1,5 +1,6 @@
 package com.noisepipe.server.controller;
 
+import com.noisepipe.server.exception.BadRequestException;
 import com.noisepipe.server.payload.*;
 import com.noisepipe.server.security.CurrentUser;
 import com.noisepipe.server.security.UserPrincipal;
@@ -43,10 +44,16 @@ public class CollectionController {
   }
 
   @GetMapping
-  public PagedResponse<CollectionSummary> getCollectionsByTagName(
-          @RequestParam String tagName,
+  public PagedResponse<CollectionSummary> searchCollections(
+          @RequestParam(required = false) String q,
+          @RequestParam(required = false) String tagName,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
           @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
-    return collectionService.getCollectionsByTagName(tagName, page, size);
+    if (q == null && tagName == null) {
+      throw new BadRequestException("Parameter q or tagName is required");
+    }
+
+    return tagName == null ? collectionService.searchCollections(q, page, size)
+            : collectionService.getCollectionsByTagName(tagName, page, size);
   }
 }
