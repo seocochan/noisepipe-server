@@ -21,4 +21,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
   int updatePosition(@Param("id") Long id,
                      @Param("userId") Long userId,
                      @Param("position") Double position);
+
+  Page<Item> findDistinctByTitleContainingIgnoreCaseOrTagsNameContainingIgnoreCase(
+          String title, String tagsName, Pageable pageable);
 }

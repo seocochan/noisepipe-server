@@ -104,4 +104,16 @@ public class CollectionService {
     List<CollectionSummary> collectionSummaries = collectionPage.map(ModelMapper::mapToSummary).getContent();
     return PagedResponse.of(collectionSummaries, collectionPage);
   }
+
+  public PagedResponse<CollectionSummary> searchCollections(String q, int page, int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+    Page<Collection> collectionPage
+            = collectionRepository.findDistinctByTitleContainingIgnoreCaseOrTagsNameContainingIgnoreCase(q, q, pageable);
+
+    if (collectionPage.getNumberOfElements() == 0) {
+      return PagedResponse.of(Collections.emptyList(), collectionPage);
+    }
+    List<CollectionSummary> collectionSummaries = collectionPage.map(ModelMapper::mapToSummary).getContent();
+    return PagedResponse.of(collectionSummaries, collectionPage);
+  }
 }

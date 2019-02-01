@@ -39,4 +39,7 @@ public interface CollectionRepository extends JpaRepository<Collection, Long> {
           "WHERE rows.id = :offsetId",
           nativeQuery = true)
   Optional<Double> getRownumById(@Param("userId") Long userId, @Param("offsetId") Long offsetId);
+
+  Page<Collection> findDistinctByTitleContainingIgnoreCaseOrTagsNameContainingIgnoreCase(
+          String title, String tagsName, Pageable pageable);
 }

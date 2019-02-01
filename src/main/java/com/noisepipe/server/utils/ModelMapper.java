@@ -10,7 +10,10 @@ public class ModelMapper {
 
   // mapToSummary()
   public static UserSummary mapToSummary(User user) {
-    return new UserSummary(user.getId(), user.getUsername());
+    return UserSummary.builder()
+            .id(user.getId())
+            .username(user.getUsername())
+            .build();
   }
 
   public static CollectionSummary mapToSummary(Collection collection) {
@@ -24,7 +27,30 @@ public class ModelMapper {
             .build();
   }
 
+  public static ItemSummary mapToSummary(Item item) {
+    return ItemSummary.builder()
+            .id(item.getId())
+            .title(item.getTitle())
+            .description(item.getDescription())
+            .sourceUrl(item.getSourceUrl())
+            .sourceProvider(item.getSourceProvider())
+            .tags(item.getTags().stream().map(Tag::getName).collect(Collectors.toList()))
+            .collectionId(item.getCollection().getId())
+            .collectionTitle(item.getCollection().getTitle())
+            .createdBy(ModelMapper.mapToSummary(item.getCollection().getUser()))
+            .createdAt(item.getCreatedAt())
+            .build();
+  }
+
   // map()
+  public static UserProfile map(User user) {
+    return UserProfile.builder()
+            .id(user.getId())
+            .username(user.getUsername())
+            .joinedAt(user.getCreatedAt())
+            .build();
+  }
+
   public static CollectionResponse map(Collection collection, Boolean isBookmarked) {
     return CollectionResponse.builder()
             .id(collection.getId())

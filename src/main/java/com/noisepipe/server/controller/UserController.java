@@ -4,6 +4,7 @@ import com.noisepipe.server.payload.*;
 import com.noisepipe.server.security.CurrentUser;
 import com.noisepipe.server.security.UserPrincipal;
 import com.noisepipe.server.service.UserService;
+import com.noisepipe.server.utils.AppConstants;
 import com.noisepipe.server.utils.ModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,5 +33,13 @@ public class UserController {
   @GetMapping("/{username}")
   public UserProfile getUserProfile(@PathVariable String username) {
     return userService.getUserProfile(username);
+  }
+
+  @GetMapping
+  public PagedResponse<UserProfile> searchUsers(
+          @RequestParam String q,
+          @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+          @RequestParam(defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
+    return userService.searchUsers(q, page, size);
   }
 }
