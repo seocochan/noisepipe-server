@@ -6,10 +6,7 @@ import com.noisepipe.server.exception.ResourceNotFoundException;
 import com.noisepipe.server.model.Role;
 import com.noisepipe.server.model.enums.RoleName;
 import com.noisepipe.server.model.User;
-import com.noisepipe.server.payload.LoginRequest;
-import com.noisepipe.server.payload.PagedResponse;
-import com.noisepipe.server.payload.SignUpRequest;
-import com.noisepipe.server.payload.UserProfile;
+import com.noisepipe.server.payload.*;
 import com.noisepipe.server.repository.RoleRepository;
 import com.noisepipe.server.repository.UserRepository;
 import com.noisepipe.server.security.JwtTokenProvider;
@@ -26,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -88,5 +86,16 @@ public class UserService {
     }
     List<UserProfile> userProfiles = userPage.map(ModelMapper::map).getContent();
     return PagedResponse.of(userProfiles, userPage);
+  }
+
+  @Transactional
+  public void updatePassword(UserPrincipal currentUser, PasswordUpdateRequest passwordUpdateRequest) {
+    if (!passwordEncoder.matches(passwordUpdateRequest.getOldPassword(), currentUser.getPassword())) {
+      throw new BadRequestException("Invalid password");
+    }
+
+    User user = userRepository.findById(currentUser.getId())
+            .orElseThrow(() -> new ResourceNotFoundException("User", "id", currentUser.getId()));
+    user.setPassword(passwordEncoder.encode(passwordUpdateRequest.getNewPassword()));
   }
 }

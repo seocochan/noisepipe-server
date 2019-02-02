@@ -1,16 +1,14 @@
 package com.noisepipe.server.controller;
 
 import com.noisepipe.server.model.User;
-import com.noisepipe.server.payload.ApiResponse;
-import com.noisepipe.server.payload.JwtAuthenticationResponse;
-import com.noisepipe.server.payload.LoginRequest;
-import com.noisepipe.server.payload.SignUpRequest;
+import com.noisepipe.server.payload.*;
 import com.noisepipe.server.security.CurrentUser;
 import com.noisepipe.server.security.UserPrincipal;
 import com.noisepipe.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -49,10 +47,19 @@ public class AuthController {
   }
 
   @DeleteMapping("/{userId}")
-  public ResponseEntity<?> deleteUser(@CurrentUser UserPrincipal currentUser,
-                                      @PathVariable Long userId) {
+  public ResponseEntity<ApiResponse> deleteUser(@CurrentUser UserPrincipal currentUser,
+                                                @PathVariable Long userId) {
     userService.deleteUser(currentUser, userId);
 
     return ResponseEntity.ok(new ApiResponse(true, "Successfully deleted user"));
+  }
+
+  @PostMapping("/updatePassword")
+  @PreAuthorize("hasRole('USER')")
+  public ResponseEntity<ApiResponse> updatePassword(@CurrentUser UserPrincipal currentUser,
+                                                    @Valid @RequestBody PasswordUpdateRequest passwordUpdateRequest) {
+    userService.updatePassword(currentUser, passwordUpdateRequest);
+
+    return ResponseEntity.ok(new ApiResponse(true, "Successfully updated password"));
   }
 }
