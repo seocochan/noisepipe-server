@@ -27,4 +27,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
   Page<Item> findDistinctByTitleContainingIgnoreCaseOrTagsNameContainingIgnoreCase(
           String title, String tagsName, Pageable pageable);
+
+  Long countByCollectionId(Long collectionId);
 }

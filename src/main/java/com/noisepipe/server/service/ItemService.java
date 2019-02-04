@@ -7,6 +7,7 @@ import com.noisepipe.server.model.Item;
 import com.noisepipe.server.payload.*;
 import com.noisepipe.server.repository.CollectionRepository;
 import com.noisepipe.server.repository.ItemRepository;
+import com.noisepipe.server.utils.AppConstants;
 import com.noisepipe.server.utils.ModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,9 @@ public class ItemService {
             .orElseThrow(() -> new ResourceNotFoundException("Collection", "id", collectionId));
     if (!userId.equals(collection.getUser().getId())) {
       throw new BadRequestException("Permission denied");
+    }
+    if (itemRepository.countByCollectionId(collectionId) >= AppConstants.MAX_COLLECTION_ITEMS_SIZE) {
+      throw new BadRequestException("Exceed limits of items per collection");
     }
 
     Item item = Item.builder()
