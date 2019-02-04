@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -78,15 +79,9 @@ public class ItemService {
     itemRepository.delete(item);
   }
 
-  public PagedResponse<ItemResponse> getItemsByCollection(Long collectionId, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "position");
-    Page<Item> itemPage = itemRepository.findByCollectionId(collectionId, pageable);
-
-    if (itemPage.getNumberOfElements() == 0) {
-      return PagedResponse.of(Collections.emptyList(), itemPage);
-    }
-    List<ItemResponse> itemResponses = itemPage.map(ModelMapper::map).getContent();
-    return PagedResponse.of(itemResponses, itemPage);
+  public List<ItemResponse> getItemsByCollection(Long collectionId) {
+    return itemRepository.findByCollectionId(collectionId, Sort.by("position"))
+            .stream().map(ModelMapper::map).collect(Collectors.toList());
   }
 
   public PagedResponse<ItemSummary> getItemsByTagName(String tagName, int page, int size) {
