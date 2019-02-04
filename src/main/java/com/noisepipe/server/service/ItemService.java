@@ -75,10 +75,8 @@ public class ItemService {
 
   @Transactional
   public void resetItemsPosition(Long userId, Long collectionId) {
-    int updated = itemRepository.resetPosition(collectionId, userId, AppConstants.ITEM_POSITION_UNIT);
-    if (updated == 0) { // no items're updated, not match to collectionId or owned by current user
-      throw new BadRequestException("Permission denied");
-    }
+    // FIXME: check collection's owner and throw exception before calling method
+    itemRepository.resetPosition(collectionId, userId, AppConstants.ITEM_POSITION_UNIT);
   }
 
   public void removeItemById(Long userId, Long itemId) {

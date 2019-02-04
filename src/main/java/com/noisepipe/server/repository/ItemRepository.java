@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -25,23 +26,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
                      @Param("userId") Long userId,
                      @Param("position") Double position);
 
-  /**
-   * Reference:
-   * https://stackoverflow.com/a/10485817/10114911
-   */
-  @Modifying
-  @Query(value = "UPDATE items target " +
-          "JOIN ( " +
-          "  SELECT id, (@rownum \\:= @rownum + :unit) as rownum " +
-          "  FROM items i " +
-          "  CROSS JOIN (SELECT @rownum \\:= 0) r " +
-          "  WHERE collection_id = :collectionId AND created_by = :userId " +
-          "  ORDER BY i.position ASC  " +
-          ") SOURCE ON target.id = source.id " +
-          "SET position = rownum " +
-          "WHERE collection_id = :collectionId AND created_by = :userId",
-          nativeQuery = true)
-  int resetPosition(@Param("collectionId") Long collectionId, @Param("userId") Long userId, @Param("unit") double unit);
+  @Procedure(name = "resetItemsPosition")
+  void resetPosition(@Param("collection_id") Long collectionId, @Param("user_id") Long userId, @Param("unit") Double unit);
 
   Page<Item> findDistinctByTitleContainingIgnoreCaseOrTagsNameContainingIgnoreCase(
           String title, String tagsName, Pageable pageable);
