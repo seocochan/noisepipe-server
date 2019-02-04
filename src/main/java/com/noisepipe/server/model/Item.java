@@ -14,11 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "items", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {
-                "collection_id", "position"
-        })
-})
+@Table(name = "items")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
