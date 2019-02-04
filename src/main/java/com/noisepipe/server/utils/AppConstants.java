@@ -9,6 +9,7 @@ public interface AppConstants {
   String DEFAULT_PAGE_SIZE = "12";
   int MAX_PAGE_SIZE = 50;
   int DEFAULT_BATCH_SIZE = 30;
+  double ITEM_POSITION_UNIT = Math.pow(2, 16);
 
   // models
   int MAX_COLLECTION_TITLE_LENGTH = 40;

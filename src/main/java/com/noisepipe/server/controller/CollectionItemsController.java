@@ -1,5 +1,6 @@
 package com.noisepipe.server.controller;
 
+import com.noisepipe.server.payload.ApiResponse;
 import com.noisepipe.server.payload.ItemPostRequest;
 import com.noisepipe.server.payload.ItemResponse;
 import com.noisepipe.server.security.CurrentUser;
@@ -29,5 +30,12 @@ public class CollectionItemsController {
   @GetMapping
   public List<ItemResponse> getItemsByCollection(@PathVariable Long collectionId) {
     return itemService.getItemsByCollection(collectionId);
+  }
+
+  @PutMapping("/position")
+  public ResponseEntity<ApiResponse> resetItemsPosition(@CurrentUser UserPrincipal currentUser,
+                                                        @PathVariable Long collectionId) {
+    itemService.resetItemsPosition(currentUser.getId(), collectionId);
+    return ResponseEntity.ok(new ApiResponse(true, "Successfully reset items' position"));
   }
 }

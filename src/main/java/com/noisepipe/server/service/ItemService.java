@@ -68,7 +68,15 @@ public class ItemService {
   @Transactional
   public void updateItemPositionById(Long userId, Long itemId, Double position) {
     int updated = itemRepository.updatePosition(itemId, userId, position);
-    if (updated == 0) { // no items're updated, not matched to id or owned by current user
+    if (updated == 0) { // no items're updated, not match to itemId or owned by current user
+      throw new BadRequestException("Permission denied");
+    }
+  }
+
+  @Transactional
+  public void resetItemsPosition(Long userId, Long collectionId) {
+    int updated = itemRepository.resetPosition(collectionId, userId, AppConstants.ITEM_POSITION_UNIT);
+    if (updated == 0) { // no items're updated, not match to collectionId or owned by current user
       throw new BadRequestException("Permission denied");
     }
   }
