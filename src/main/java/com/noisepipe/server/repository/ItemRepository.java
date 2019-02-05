@@ -33,4 +33,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
           String title, String tagsName, Pageable pageable);
 
   Long countByCollectionId(Long collectionId);
+
+  @Query("SELECT i.collection.id FROM Item i GROUP BY i.collection ORDER BY MAX(i.createdAt) DESC")
+  List<Long> findRecentlyUpdatedCollectionIds(Pageable pageable);
 }

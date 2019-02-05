@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/collections")
@@ -55,5 +56,15 @@ public class CollectionController {
 
     return tagName == null ? collectionService.searchCollections(q, page, size)
             : collectionService.getCollectionsByTagName(tagName, page, size);
+  }
+
+  @GetMapping("/recentlyCreated")
+  public List<CollectionSummary> getRecentlyCreatedCollections() {
+    return collectionService.getRecentlyCreatedCollections();
+  }
+
+  @GetMapping("/recentlyUpdated")
+  public List<CollectionSummary> getRecentlyUpdatedCollections() {
+    return collectionService.getRecentlyUpdatedCollections();
   }
 }

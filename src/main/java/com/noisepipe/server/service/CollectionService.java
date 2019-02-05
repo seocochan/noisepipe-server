@@ -10,6 +10,7 @@ import com.noisepipe.server.payload.CollectionSummary;
 import com.noisepipe.server.payload.PagedResponse;
 import com.noisepipe.server.repository.BookmarkRepository;
 import com.noisepipe.server.repository.CollectionRepository;
+import com.noisepipe.server.repository.ItemRepository;
 import com.noisepipe.server.repository.UserRepository;
 import com.noisepipe.server.utils.ModelMapper;
 import com.noisepipe.server.utils.OffsetBasedPageRequest;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +29,7 @@ public class CollectionService {
 
   private final UserRepository userRepository;
   private final CollectionRepository collectionRepository;
+  private final ItemRepository itemRepository;
   private final BookmarkRepository bookmarkRepository;
   private final TagService tagService;
 
@@ -115,5 +118,16 @@ public class CollectionService {
     }
     List<CollectionSummary> collectionSummaries = collectionPage.map(ModelMapper::mapToSummary).getContent();
     return PagedResponse.of(collectionSummaries, collectionPage);
+  }
+
+  public List<CollectionSummary> getRecentlyCreatedCollections() {
+    return collectionRepository.findTop6By(Sort.by(Sort.Direction.DESC, "createdAt"))
+            .stream().map(ModelMapper::mapToSummary).collect(Collectors.toList());
+  }
+
+  public List<CollectionSummary> getRecentlyUpdatedCollections() {
+    List<Long> collectionIds = itemRepository.findRecentlyUpdatedCollectionIds(PageRequest.of(0, 6));
+    return collectionRepository.findByIdInOrderByField(collectionIds)
+            .stream().map(ModelMapper::mapToSummary).collect(Collectors.toList());
   }
 }
