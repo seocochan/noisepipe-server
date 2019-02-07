@@ -14,10 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "items", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {
-                "collection_id", "position"
-        })
+@Table(name = "items")
+@NamedStoredProcedureQueries({
+        @NamedStoredProcedureQuery(
+                name = "resetItemsPosition",
+                procedureName = "reset_items_position",
+                parameters = {
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "collection_id", type = Long.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "user_id", type = Long.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "unit", type = Double.class)
+                })
 })
 @Builder
 @AllArgsConstructor

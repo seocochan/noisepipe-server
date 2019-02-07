@@ -7,6 +7,7 @@ import com.noisepipe.server.model.Item;
 import com.noisepipe.server.payload.*;
 import com.noisepipe.server.repository.CollectionRepository;
 import com.noisepipe.server.repository.ItemRepository;
+import com.noisepipe.server.utils.AppConstants;
 import com.noisepipe.server.utils.ModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +35,9 @@ public class ItemService {
             .orElseThrow(() -> new ResourceNotFoundException("Collection", "id", collectionId));
     if (!userId.equals(collection.getUser().getId())) {
       throw new BadRequestException("Permission denied");
+    }
+    if (itemRepository.countByCollectionId(collectionId) >= AppConstants.MAX_COLLECTION_ITEMS_SIZE) {
+      throw new BadRequestException("Exceed limits of items per collection");
     }
 
     Item item = Item.builder()
@@ -63,9 +68,15 @@ public class ItemService {
   @Transactional
   public void updateItemPositionById(Long userId, Long itemId, Double position) {
     int updated = itemRepository.updatePosition(itemId, userId, position);
-    if (updated == 0) { // no items're updated, not matched to id or owned by current user
+    if (updated == 0) { // no items're updated, not match to itemId or owned by current user
       throw new BadRequestException("Permission denied");
     }
+  }
+
+  @Transactional
+  public void resetItemsPosition(Long userId, Long collectionId) {
+    // FIXME: check collection's owner and throw exception before calling method
+    itemRepository.resetPosition(collectionId, userId, AppConstants.ITEM_POSITION_UNIT);
   }
 
   public void removeItemById(Long userId, Long itemId) {
@@ -78,15 +89,9 @@ public class ItemService {
     itemRepository.delete(item);
   }
 
-  public PagedResponse<ItemResponse> getItemsByCollection(Long collectionId, int page, int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "position");
-    Page<Item> itemPage = itemRepository.findByCollectionId(collectionId, pageable);
-
-    if (itemPage.getNumberOfElements() == 0) {
-      return PagedResponse.of(Collections.emptyList(), itemPage);
-    }
-    List<ItemResponse> itemResponses = itemPage.map(ModelMapper::map).getContent();
-    return PagedResponse.of(itemResponses, itemPage);
+  public List<ItemResponse> getItemsByCollection(Long collectionId) {
+    return itemRepository.findByCollectionId(collectionId, Sort.by("position"))
+            .stream().map(ModelMapper::map).collect(Collectors.toList());
   }
 
   public PagedResponse<ItemSummary> getItemsByTagName(String tagName, int page, int size) {

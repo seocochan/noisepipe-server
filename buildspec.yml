@@ -20,7 +20,7 @@ phases:
       spring.datasource.username='$DATASOURCE_USERNAME'\n
       spring.datasource.password='$DATASOURCE_PASSWORD'\n
       spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect\n
-      spring.jpa.hibernate.ddl-auto=update\n
+      spring.jpa.hibernate.ddl-auto=validate\n
       logging.level.org.hibernate.SQL=DEBUG\n
       app.jwtSecret='$JWT_SECRET'\n
       media.youtube.clientKey='$YT_CLIENT_KEY'\n

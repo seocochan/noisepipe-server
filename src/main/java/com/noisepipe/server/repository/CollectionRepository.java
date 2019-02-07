@@ -3,6 +3,7 @@ package com.noisepipe.server.repository;
 import com.noisepipe.server.model.Collection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,6 +24,10 @@ public interface CollectionRepository extends JpaRepository<Collection, Long> {
           nativeQuery = true)
   Page<Collection> findByIdInOrderByField(List<Long> id, Pageable pageable);
 
+  @Query(value = "SELECT * FROM collections WHERE id IN ?1 ORDER BY FIELD(id, ?1)",
+          nativeQuery = true)
+  List<Collection> findByIdInOrderByField(List<Long> id);
+
   Page<Collection> findByBookmarksUserUsername(String username, Pageable pageable);
 
   /**
@@ -42,4 +47,6 @@ public interface CollectionRepository extends JpaRepository<Collection, Long> {
 
   Page<Collection> findDistinctByTitleContainingIgnoreCaseOrTagsNameContainingIgnoreCase(
           String title, String tagsName, Pageable pageable);
+
+  List<Collection> findTop6By(Sort sort);
 }
