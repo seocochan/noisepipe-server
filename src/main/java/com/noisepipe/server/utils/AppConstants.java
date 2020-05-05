@@ -4,7 +4,7 @@ public interface AppConstants {
 
   // common
   String YT_BASE_URL = "https://www.googleapis.com/youtube/v3";
-  String SC_BASE_URL = "https://api.soundcloud.com";
+  String SC_BASE_URL = "https://api-v2.soundcloud.com";
   String DEFAULT_PAGE_NUMBER = "0";
   String DEFAULT_PAGE_SIZE = "12";
   int MAX_PAGE_SIZE = 50;
