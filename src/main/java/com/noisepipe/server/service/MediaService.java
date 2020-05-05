@@ -45,7 +45,7 @@ public class MediaService {
       }
     } else { // SOUNDCLOUD
       String parsedUrl = Parser.convertSoundcloudUrl(url);
-      String requestUrl = AppConstants.SC_BASE_URL + "/resolve.json?url=" + parsedUrl + "&client_id=" + SC_CLIENT_KEY;
+      String requestUrl = AppConstants.SC_BASE_URL + "/resolve?url=" + parsedUrl + "&client_id=" + SC_CLIENT_KEY;
 
       try {
         ResponseEntity<SoundcloudResponse> response = restTemplate.getForEntity(requestUrl, SoundcloudResponse.class);
